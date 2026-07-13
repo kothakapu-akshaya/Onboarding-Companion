@@ -7,9 +7,23 @@ import EventCard from "../components/EventCard";
 import { getProfile } from "../services/user";
 import { getEvents } from "../services/event";
 
+type UserProfile = {
+  name: string;
+  email: string;
+  phone: string;
+};
+
+type Event = {
+  uid: string;
+  name: string;
+  description: string;
+  start_date: string;
+  end_date: string;
+};
+
 function Dashboard() {
-  const [user, setUser] = useState<any>(null);
-  const [events, setEvents] = useState<any[]>([]);
+  const [user, setUser] = useState<UserProfile | null>(null);
+  const [events, setEvents] = useState<Event[]>([]);
 
   // Dummy task data (until backend provides task APIs)
   const totalTasks = 12;
@@ -33,9 +47,7 @@ function Dashboard() {
 
   return (
     <Layout>
-      <h1>
-        Welcome, {user ? user.name : "User"} 👋
-      </h1>
+      <h1>Welcome, {user ? user.name : "User"} 👋</h1>
 
       <br />
 
@@ -49,11 +61,7 @@ function Dashboard() {
 
       <h2>Today's Tasks</h2>
 
-      <TaskCard
-        title="Setup Laptop"
-        status="Completed"
-        buttonText="View"
-      />
+      <TaskCard title="Setup Laptop" status="Completed" buttonText="View" />
 
       <TaskCard
         title="Configure Email"
@@ -68,15 +76,17 @@ function Dashboard() {
       {events.length === 0 ? (
         <p>No upcoming events.</p>
       ) : (
-        events.slice(0, 2).map((event) => (
-          <EventCard
-            key={event.uid}
-            title={event.name}
-            date={new Date(event.start_date).toLocaleDateString()}
-            location={event.description || "Not specified"}
-            buttonText="View"
-          />
-        ))
+        events
+          .slice(0, 2)
+          .map((event) => (
+            <EventCard
+              key={event.uid}
+              title={event.name}
+              date={new Date(event.start_date).toLocaleDateString()}
+              location={event.description || "Not specified"}
+              buttonText="View"
+            />
+          ))
       )}
     </Layout>
   );

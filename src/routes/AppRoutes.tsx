@@ -12,7 +12,6 @@ function AppRoutes() {
   return (
     <BrowserRouter>
       <Routes>
-
         {/* Public Route */}
         <Route path="/" element={<Login />} />
 
@@ -52,7 +51,6 @@ function AppRoutes() {
             </ProtectedRoute>
           }
         />
-
       </Routes>
     </BrowserRouter>
   );

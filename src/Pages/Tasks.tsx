@@ -8,11 +8,7 @@ function Tasks() {
 
       <br />
 
-      <TaskCard
-        title="Setup Laptop"
-        status="Completed"
-        buttonText="View"
-      />
+      <TaskCard title="Setup Laptop" status="Completed" buttonText="View" />
 
       <TaskCard
         title="Read Company Policies"

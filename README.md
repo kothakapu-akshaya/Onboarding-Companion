@@ -12,28 +12,28 @@ This project is the frontend of the application and communicates with a FastAPI 
 
 ### Frontend
 
-* React
-* TypeScript
-* React Router
-* Axios
-* CSS
+- React
+- TypeScript
+- React Router
+- Axios
+- CSS
 
 ### Backend
 
-* FastAPI
+- FastAPI
 
 ---
 
 ## Features
 
-* Secure user authentication using JWT
-* Protected routes for authenticated users
-* Personalized dashboard
-* Employee profile page
-* Company events page
-* Task management interface
-* Progress overview
-* Logout functionality
+- Secure user authentication using JWT
+- Protected routes for authenticated users
+- Personalized dashboard
+- Employee profile page
+- Company events page
+- Task management interface
+- Progress overview
+- Logout functionality
 
 ---
 
@@ -43,15 +43,15 @@ The following backend APIs have been integrated into the frontend:
 
 | API                                  | Status |
 | ------------------------------------ | ------ |
-| Login (`POST /api/v1/auth/login`)    | ✅      |
-| Current User (`GET /api/v1/auth/me`) | ✅      |
-| Events (`GET /api/v1/events`)        | ✅      |
+| Login (`POST /api/v1/auth/login`)    | ✅     |
+| Current User (`GET /api/v1/auth/me`) | ✅     |
+| Events (`GET /api/v1/events`)        | ✅     |
 
 ### Authentication
 
-* Users authenticate using the backend Login API.
-* JWT tokens are securely stored in the browser and automatically attached to authenticated requests.
-* Protected routes prevent unauthorized access to application pages.
+- Users authenticate using the backend Login API.
+- JWT tokens are securely stored in the browser and automatically attached to authenticated requests.
+- Protected routes prevent unauthorized access to application pages.
 
 ---
 
@@ -59,10 +59,10 @@ The following backend APIs have been integrated into the frontend:
 
 The dashboard provides a quick overview of the onboarding process by displaying:
 
-* Logged-in information
-* Overall onboarding progress
-* Today's tasks
-* Upcoming company events
+- Logged-in information
+- Overall onboarding progress
+- Today's tasks
+- Upcoming company events
 
 User information and events are fetched dynamically from the backend.
 
@@ -80,12 +80,12 @@ At present, task data is displayed using placeholder data because the available 
 
 The Profile page retrieves employee information from the backend and displays details such as:
 
-* Name
-* Phone Number
-* Email Address
-* Role
-* Profession
-* Organization
+- Name
+- Phone Number
+- Email Address
+- Role
+- Profession
+- Organization
 
 Additional profile information is displayed whenever it is available from the backend response.
 
@@ -95,9 +95,9 @@ Additional profile information is displayed whenever it is available from the ba
 
 The Events page retrieves company events from the backend and displays:
 
-* Event name
-* Event date
-* Event description
+- Event name
+- Event date
+- Event description
 
 ---
 
@@ -137,17 +137,17 @@ http://localhost:8000
 
 ## Development Notes
 
-* Authentication was tested using a seed user available in the backend environment.
-* Axios is used for API communication.
-* Route protection is implemented using React Router.
-* Components have been designed to be reusable across multiple pages.
+- Authentication was tested using a seed user available in the backend environment.
+- Axios is used for API communication.
+- Route protection is implemented using React Router.
+- Components have been designed to be reusable across multiple pages.
 
 ---
 
 ## Current Implementation Status
 
-| Feature                  | Status                        |
-| ------------------------ | ----------------------------- |
+| Feature                  | Status                         |
+| ------------------------ | ------------------------------ |
 | Login                    | ✅ Completed                   |
 | Authentication           | ✅ Completed                   |
 | Protected Routes         | ✅ Completed                   |
@@ -161,12 +161,12 @@ http://localhost:8000
 
 ## Future Improvements
 
-* Integrate backend task management APIs
-* Enable task completion updates
-* Event registration functionality
-* Profile editing
-* Dashboard analytics
-* Improved responsive design
+- Integrate backend task management APIs
+- Enable task completion updates
+- Event registration functionality
+- Profile editing
+- Dashboard analytics
+- Improved responsive design
 
 ---
 

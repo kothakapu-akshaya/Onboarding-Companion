@@ -51,13 +51,9 @@ function Login() {
           />
         </div>
 
-        <p className="forgot-password">
-          Forgot Password?
-        </p>
+        <p className="forgot-password">Forgot Password?</p>
 
-        <button onClick={handleLogin}>
-          Login
-        </button>
+        <button onClick={handleLogin}>Login</button>
       </div>
     </div>
   );

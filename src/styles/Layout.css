@@ -1,10 +1,10 @@
 .layout {
-    display: flex;
-    min-height: 100vh;
+  display: flex;
+  min-height: 100vh;
 }
 
 .main-content {
-    flex: 1;
-    padding: 30px;
-    background: #f5f7fb;
+  flex: 1;
+  padding: 30px;
+  background: #f5f7fb;
 }

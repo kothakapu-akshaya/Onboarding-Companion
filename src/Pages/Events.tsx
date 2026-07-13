@@ -3,8 +3,16 @@ import Layout from "../components/Layout";
 import EventCard from "../components/EventCard";
 import { getEvents } from "../services/event";
 
+type Event = {
+  uid: string;
+  name: string;
+  description: string;
+  start_date: string;
+  end_date: string;
+};
+
 function Events() {
-  const [events, setEvents] = useState<any[]>([]);
+  const [events, setEvents] = useState<Event[]>([]);
 
   useEffect(() => {
     const fetchEvents = async () => {

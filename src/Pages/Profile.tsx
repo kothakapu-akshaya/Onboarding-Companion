@@ -3,8 +3,18 @@ import Layout from "../components/Layout";
 import ProfileCard from "../components/ProfileCard";
 import { getProfile } from "../services/user";
 
+type UserProfile = {
+  name: string;
+  phone: string;
+  email: string;
+  profession?: string;
+  organisation?: string;
+  current_year_of_study?: string;
+  role?: string;
+};
+
 function Profile() {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<UserProfile | null>(null);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -40,7 +50,7 @@ function Profile() {
         profession={user.profession}
         organisation={user.organisation}
         currentYear={user.current_year_of_study}
-        role={user.role}
+        role={user.role || "Employee"}
       />
     </Layout>
   );

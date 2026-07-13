@@ -7,12 +7,7 @@ type EventCardProps = {
   buttonText: string;
 };
 
-function EventCard({
-  title,
-  date,
-  location,
-  buttonText,
-}: EventCardProps) {
+function EventCard({ title, date, location, buttonText }: EventCardProps) {
   return (
     <div className="event-card">
       <h3>{title}</h3>

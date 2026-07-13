@@ -13,10 +13,7 @@ function ProgressCard({
 }: ProgressCardProps) {
   const pendingTasks = totalTasks - completedTasks;
 
-  const progress =
-    totalTasks === 0
-      ? 0
-      : (completedTasks / totalTasks) * 100;
+  const progress = totalTasks === 0 ? 0 : (completedTasks / totalTasks) * 100;
 
   return (
     <div className="progress-card">

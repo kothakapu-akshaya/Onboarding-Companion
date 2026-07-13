@@ -6,11 +6,7 @@ type TaskCardProps = {
   buttonText: string;
 };
 
-function TaskCard({
-  title,
-  status,
-  buttonText,
-}: TaskCardProps) {
+function TaskCard({ title, status, buttonText }: TaskCardProps) {
   return (
     <div className="task-card">
       <h3>{title}</h3>
