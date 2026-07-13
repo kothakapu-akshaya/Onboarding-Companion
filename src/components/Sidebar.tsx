@@ -22,7 +22,7 @@ function Sidebar() {
   return (
     <aside className="sidebar">
       <div className="logo">
-        <h2>🏢 Employee Onboarding</h2>
+        <h2> Intern Onboarding-Companion</h2>
       </div>
 
       <nav className="menu">

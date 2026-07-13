@@ -1,75 +1,175 @@
-# React + TypeScript + Vite
+# Intern Onboarding Companion
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Overview
 
-Currently, two official plugins are available:
+The Intern Onboarding Companion is a web application designed to simplify the onboarding process for new employees. Instead of relying on scattered emails, messages, and documents, the application provides a centralized platform where employees can access onboarding information, monitor their progress, view assigned tasks, participate in company events, and manage their profile.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+This project is the frontend of the application and communicates with a FastAPI backend using REST APIs.
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tech Stack
 
-## Expanding the ESLint configuration
+### Frontend
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+* React
+* TypeScript
+* React Router
+* Axios
+* CSS
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Backend
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+* FastAPI
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+---
 
+## Features
+
+* Secure user authentication using JWT
+* Protected routes for authenticated users
+* Personalized dashboard
+* Employee profile page
+* Company events page
+* Task management interface
+* Progress overview
+* Logout functionality
+
+---
+
+## Backend Integration
+
+The following backend APIs have been integrated into the frontend:
+
+| API                                  | Status |
+| ------------------------------------ | ------ |
+| Login (`POST /api/v1/auth/login`)    | ✅      |
+| Current User (`GET /api/v1/auth/me`) | ✅      |
+| Events (`GET /api/v1/events`)        | ✅      |
+
+### Authentication
+
+* Users authenticate using the backend Login API.
+* JWT tokens are securely stored in the browser and automatically attached to authenticated requests.
+* Protected routes prevent unauthorized access to application pages.
+
+---
+
+## Dashboard
+
+The dashboard provides a quick overview of the onboarding process by displaying:
+
+* Logged-in information
+* Overall onboarding progress
+* Today's tasks
+* Upcoming company events
+
+User information and events are fetched dynamically from the backend.
+
+---
+
+## Tasks
+
+The task interface has been fully developed on the frontend.
+
+At present, task data is displayed using placeholder data because the available backend does not expose task retrieval or update APIs. The application has been structured so that backend task integration can be added with minimal changes once those endpoints become available.
+
+---
+
+## Profile
+
+The Profile page retrieves employee information from the backend and displays details such as:
+
+* Name
+* Phone Number
+* Email Address
+* Role
+* Profession
+* Organization
+
+Additional profile information is displayed whenever it is available from the backend response.
+
+---
+
+## Events
+
+The Events page retrieves company events from the backend and displays:
+
+* Event name
+* Event date
+* Event description
+
+---
+
+## Running the Project
+
+### Install dependencies
+
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Start the development server
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+npm run dev
 ```
+
+The application will be available at:
+
+```text
+http://localhost:5173
+```
+
+---
+
+## Backend Requirements
+
+Before running the frontend, ensure the FastAPI backend is running.
+
+Default backend URL:
+
+```text
+http://localhost:8000
+```
+
+---
+
+## Development Notes
+
+* Authentication was tested using a seed user available in the backend environment.
+* Axios is used for API communication.
+* Route protection is implemented using React Router.
+* Components have been designed to be reusable across multiple pages.
+
+---
+
+## Current Implementation Status
+
+| Feature                  | Status                        |
+| ------------------------ | ----------------------------- |
+| Login                    | ✅ Completed                   |
+| Authentication           | ✅ Completed                   |
+| Protected Routes         | ✅ Completed                   |
+| Dashboard                | ✅ Integrated                  |
+| Profile                  | ✅ Integrated                  |
+| Events                   | ✅ Integrated                  |
+| Tasks UI                 | ✅ Completed                   |
+| Task Backend Integration | ⏳ Pending (API not available) |
+
+---
+
+## Future Improvements
+
+* Integrate backend task management APIs
+* Enable task completion updates
+* Event registration functionality
+* Profile editing
+* Dashboard analytics
+* Improved responsive design
+
+---
+
+## Author
+
+**Akshaya Kothakapu**
