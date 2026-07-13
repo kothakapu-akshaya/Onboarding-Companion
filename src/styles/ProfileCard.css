@@ -1,0 +1,39 @@
+.profile-card {
+  max-width: 750px;
+  margin: auto;
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.profile-avatar {
+  font-size: 70px;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.profile-card h2 {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.info-row span {
+  color: #666;
+}
+
+.info-row strong {
+  color: #222;
+}
