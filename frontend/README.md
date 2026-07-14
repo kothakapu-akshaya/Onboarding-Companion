@@ -2,9 +2,9 @@
 
 ## Overview
 
-The Intern Onboarding Companion is a web application designed to simplify the onboarding process for new employees. Instead of relying on scattered emails, messages, and documents, the application provides a centralized platform where employees can access onboarding information, monitor their progress, view assigned tasks, participate in company events, and manage their profile.
+The Intern Onboarding Companion is a full-stack web application designed to simplify the onboarding process for new employees. Instead of relying on scattered emails, messages, and documents, the application provides a centralized platform where employees can access onboarding information, monitor their progress, view assigned tasks, participate in company events, and manage their profile.
 
-This project is the frontend of the application and communicates with a FastAPI backend using REST APIs.
+The frontend is built using React and TypeScript, while the backend is developed using FastAPI. The application communicates with the backend through REST APIs and provides a secure and responsive onboarding experience.
 
 ---
 
@@ -14,6 +14,7 @@ This project is the frontend of the application and communicates with a FastAPI 
 
 - React
 - TypeScript
+- Vite
 - React Router
 - Axios
 - CSS
@@ -21,19 +22,36 @@ This project is the frontend of the application and communicates with a FastAPI 
 ### Backend
 
 - FastAPI
+- PostgreSQL
+- Redis
+- Celery
+- MinIO
+- Docker Compose
+
+### Development Tools
+
+- Git
+- GitLab
+- Swagger (OpenAPI)
+- ESLint
+- Prettier
+- Husky
+- lint-staged
+- Vitest
 
 ---
 
 ## Features
 
-- Secure user authentication using JWT
-- Protected routes for authenticated users
-- Personalized dashboard
-- Employee profile page
-- Company events page
-- Task management interface
-- Progress overview
-- Logout functionality
+- Secure JWT Authentication
+- Protected Routes
+- Employee Dashboard
+- Employee Profile
+- Task Management
+- Company Events
+- Onboarding Progress Tracking
+- REST API Integration
+- Responsive User Interface
 
 ---
 
@@ -41,38 +59,49 @@ This project is the frontend of the application and communicates with a FastAPI 
 
 The following backend APIs have been integrated into the frontend:
 
-| API                                  | Status |
-| ------------------------------------ | ------ |
-| Login (`POST /api/v1/auth/login`)    | ✅     |
-| Current User (`GET /api/v1/auth/me`) | ✅     |
-| Events (`GET /api/v1/events`)        | ✅     |
+| API | Status |
+|------|--------|
+| Login (`POST /api/v1/auth/login`) | Completed |
+| Current User (`GET /api/v1/auth/me`) | Completed |
+| Tasks (`GET /api/v1/tasks`) | Completed |
+| Events (`GET /api/v1/events`) | Completed |
 
-### Authentication
+---
+
+## Authentication
 
 - Users authenticate using the backend Login API.
-- JWT tokens are securely stored in the browser and automatically attached to authenticated requests.
-- Protected routes prevent unauthorized access to application pages.
+- JWT tokens are securely stored in the browser.
+- Axios automatically attaches the authentication token to protected requests.
+- Protected routes prevent unauthorized users from accessing application pages.
 
 ---
 
 ## Dashboard
 
-The dashboard provides a quick overview of the onboarding process by displaying:
+The Dashboard provides an overview of the employee onboarding process by displaying:
 
-- Logged-in information
+- Logged-in employee information
 - Overall onboarding progress
-- Today's tasks
+- Assigned onboarding tasks
 - Upcoming company events
 
-User information and events are fetched dynamically from the backend.
+All dashboard information is fetched dynamically from the backend through REST APIs.
 
 ---
 
 ## Tasks
 
-The task interface has been fully developed on the frontend.
+The Tasks module is fully integrated with the backend Task APIs.
 
-At present, task data is displayed using placeholder data because the available backend does not expose task retrieval or update APIs. The application has been structured so that backend task integration can be added with minimal changes once those endpoints become available.
+Users can:
+
+- View assigned onboarding tasks
+- View task status
+- Display task information dynamically from the backend
+- Access updated task information without relying on hardcoded or mock data
+
+The Dashboard also displays a summary of onboarding tasks retrieved from the backend.
 
 ---
 
@@ -81,8 +110,8 @@ At present, task data is displayed using placeholder data because the available 
 The Profile page retrieves employee information from the backend and displays details such as:
 
 - Name
-- Phone Number
 - Email Address
+- Phone Number
 - Role
 - Profession
 - Organization
@@ -95,27 +124,50 @@ Additional profile information is displayed whenever it is available from the ba
 
 The Events page retrieves company events from the backend and displays:
 
-- Event name
-- Event date
-- Event description
+- Event Name
+- Event Date
+- Event Description
+
+Upcoming events displayed on the Dashboard are also fetched from the backend.
 
 ---
 
 ## Running the Project
 
-### Install dependencies
+### Clone the Repository
 
 ```bash
-npm install
+git clone <repository-url>
 ```
 
-### Start the development server
+### Backend Setup
 
 ```bash
+cd backend
+docker compose up --build
+```
+
+The backend will be available at:
+
+```text
+http://localhost:8000
+```
+
+Swagger Documentation:
+
+```text
+http://localhost:8000/docs
+```
+
+### Frontend Setup
+
+```bash
+cd frontend
+npm install
 npm run dev
 ```
 
-The application will be available at:
+The frontend will be available at:
 
 ```text
 http://localhost:5173
@@ -123,50 +175,133 @@ http://localhost:5173
 
 ---
 
-## Backend Requirements
+## Development Credentials
 
-Before running the frontend, ensure the FastAPI backend is running.
+The backend provides seeded users for local development and testing.
 
-Default backend URL:
+### Admin User
+
+Phone:
 
 ```text
-http://localhost:8000
++919900000000
+```
+
+Password:
+
+```text
+SeedAdmin@123
+```
+
+### Regular User
+
+Phone:
+
+```text
++919900000001
+```
+
+Password:
+
+```text
+SeedUser@123
+```
+
+These credentials are intended only for development and testing.
+
+---
+
+## Quality Checks
+
+The frontend uses Husky and lint-staged to perform automated quality checks before every commit.
+
+The following commands are executed:
+
+```bash
+npm run lint
+npm run format
+npm run type-check
+npm test -- --run
+npm run build
+```
+
+These checks ensure:
+
+- Consistent code formatting
+- ESLint validation
+- TypeScript type safety
+- Unit testing
+- Successful production build
+
+---
+
+## Project Structure
+
+```text
+onboarding-companion-fullstack/
+
+├── frontend/
+│   ├── src/
+│   │   ├── api/
+│   │   ├── components/
+│   │   ├── Pages/
+│   │   ├── services/
+│   │   ├── routes/
+│   │   └── styles/
+│   └── package.json
+│
+└── backend/
+    ├── app/
+    ├── scripts/
+    ├── alembic/
+    ├── Dockerfile
+    ├── docker-compose.yml
+    └── pyproject.toml
 ```
 
 ---
 
 ## Development Notes
 
-- Authentication was tested using a seed user available in the backend environment.
 - Axios is used for API communication.
 - Route protection is implemented using React Router.
-- Components have been designed to be reusable across multiple pages.
+- Reusable components are used throughout the application.
+- The frontend communicates with the backend using REST APIs.
+- Docker Compose is used for local backend development.
+- Swagger is used for API testing and verification.
 
 ---
 
 ## Current Implementation Status
 
-| Feature                  | Status                         |
-| ------------------------ | ------------------------------ |
-| Login                    | ✅ Completed                   |
-| Authentication           | ✅ Completed                   |
-| Protected Routes         | ✅ Completed                   |
-| Dashboard                | ✅ Integrated                  |
-| Profile                  | ✅ Integrated                  |
-| Events                   | ✅ Integrated                  |
-| Tasks UI                 | ✅ Completed                   |
-| Task Backend Integration | ⏳ Pending (API not available) |
+| Feature | Status |
+|----------|--------|
+| Login | Completed |
+| Authentication | Completed |
+| Protected Routes | Completed |
+| Dashboard | Completed |
+| Profile | Completed |
+| Events | Completed |
+| Tasks UI | Completed |
+| Task Backend Integration | Completed |
 
 ---
 
 ## Future Improvements
 
-- Integrate backend task management APIs
-- Enable task completion updates
+- Task status updates from the frontend
 - Event registration functionality
 - Profile editing
 - Dashboard analytics
 - Improved responsive design
+- Production deployment
+- Continuous Integration and Continuous Deployment (CI/CD)
+
+---
+
+## Deployment
+
+Deployment is currently in progress. The live application URL will be added after deployment.
 
 ---
 
