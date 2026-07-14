@@ -2,7 +2,7 @@ import "../styles/TaskCard.css";
 
 type TaskCardProps = {
   title: string;
-  status: "Completed" | "Pending";
+  status: string;
   buttonText: string;
 };
 
