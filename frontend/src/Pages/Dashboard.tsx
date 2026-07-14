@@ -6,6 +6,8 @@ import EventCard from "../components/EventCard";
 
 import { getProfile } from "../services/user";
 import { getEvents } from "../services/event";
+import { getTasks } from "../services/task";
+import type { Task } from "../services/task";
 
 type UserProfile = {
   name: string;
@@ -24,19 +26,20 @@ type Event = {
 function Dashboard() {
   const [user, setUser] = useState<UserProfile | null>(null);
   const [events, setEvents] = useState<Event[]>([]);
-
-  // Dummy task data (until backend provides task APIs)
-  const totalTasks = 12;
-  const completedTasks = 8;
+  const [tasks, setTasks] = useState<Task[]>([]);
 
   useEffect(() => {
     const loadDashboard = async () => {
       try {
-        const profile = await getProfile();
-        setUser(profile);
+        const [profile, eventData, taskData] = await Promise.all([
+          getProfile(),
+          getEvents(),
+          getTasks(),
+        ]);
 
-        const eventData = await getEvents();
+        setUser(profile);
         setEvents(eventData);
+        setTasks(taskData);
       } catch (error) {
         console.error("Failed to load dashboard", error);
       }
@@ -44,6 +47,11 @@ function Dashboard() {
 
     loadDashboard();
   }, []);
+
+  const totalTasks = tasks.length;
+  const completedTasks = tasks.filter(
+    (task) => task.status.toLowerCase() === "completed"
+  ).length;
 
   return (
     <Layout>
@@ -61,13 +69,18 @@ function Dashboard() {
 
       <h2>Today's Tasks</h2>
 
-      <TaskCard title="Setup Laptop" status="Completed" buttonText="View" />
-
-      <TaskCard
-        title="Configure Email"
-        status="Pending"
-        buttonText="Mark Complete"
-      />
+      {tasks.length === 0 ? (
+        <p>No tasks available.</p>
+      ) : (
+        tasks.slice(0, 2).map((task) => (
+          <TaskCard
+            key={task.id}
+            title={task.title}
+            status={task.status}
+            buttonText="View"
+          />
+        ))
+      )}
 
       <br />
 
@@ -76,17 +89,15 @@ function Dashboard() {
       {events.length === 0 ? (
         <p>No upcoming events.</p>
       ) : (
-        events
-          .slice(0, 2)
-          .map((event) => (
-            <EventCard
-              key={event.uid}
-              title={event.name}
-              date={new Date(event.start_date).toLocaleDateString()}
-              location={event.description || "Not specified"}
-              buttonText="View"
-            />
-          ))
+        events.slice(0, 2).map((event) => (
+          <EventCard
+            key={event.uid}
+            title={event.name}
+            date={new Date(event.start_date).toLocaleDateString()}
+            location={event.description || "Not specified"}
+            buttonText="View"
+          />
+        ))
       )}
     </Layout>
   );
