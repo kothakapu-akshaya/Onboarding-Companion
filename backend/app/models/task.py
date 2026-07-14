@@ -10,28 +10,15 @@ class Task(SQLModel, table=True):
     Employee onboarding task model.
     """
 
-    id: UUID = Field(
-        default_factory=uuid_pkg.uuid4,
-        primary_key=True
-    )
+    id: UUID = Field(default_factory=uuid_pkg.uuid4, primary_key=True)
 
-    title: str = Field(
-        max_length=200
-    )
+    title: str = Field(max_length=200)
 
-    description: str | None = Field(
-        default=None,
-        max_length=500
-    )
+    description: str | None = Field(default=None, max_length=500)
 
-    status: str = Field(
-        default="Pending",
-        max_length=50
-    )
+    status: str = Field(default="Pending", max_length=50)
 
-    assigned_to: UUID = Field(
-        foreign_key="user.id"
-    )
+    assigned_to: UUID = Field(foreign_key="user.id")
 
     created_at: datetime = Field(
         default_factory=lambda: datetime.now(timezone.utc)

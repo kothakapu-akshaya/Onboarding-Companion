@@ -72,14 +72,16 @@ function Dashboard() {
       {tasks.length === 0 ? (
         <p>No tasks available.</p>
       ) : (
-        tasks.slice(0, 2).map((task) => (
-          <TaskCard
-            key={task.id}
-            title={task.title}
-            status={task.status}
-            buttonText="View"
-          />
-        ))
+        tasks
+          .slice(0, 2)
+          .map((task) => (
+            <TaskCard
+              key={task.id}
+              title={task.title}
+              status={task.status}
+              buttonText="View"
+            />
+          ))
       )}
 
       <br />
@@ -89,15 +91,17 @@ function Dashboard() {
       {events.length === 0 ? (
         <p>No upcoming events.</p>
       ) : (
-        events.slice(0, 2).map((event) => (
-          <EventCard
-            key={event.uid}
-            title={event.name}
-            date={new Date(event.start_date).toLocaleDateString()}
-            location={event.description || "Not specified"}
-            buttonText="View"
-          />
-        ))
+        events
+          .slice(0, 2)
+          .map((event) => (
+            <EventCard
+              key={event.uid}
+              title={event.name}
+              date={new Date(event.start_date).toLocaleDateString()}
+              location={event.description || "Not specified"}
+              buttonText="View"
+            />
+          ))
       )}
     </Layout>
   );

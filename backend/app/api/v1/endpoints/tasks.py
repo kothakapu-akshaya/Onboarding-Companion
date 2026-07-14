@@ -26,6 +26,7 @@ router = APIRouter()
 # Existing Export API
 # -------------------------------------------------------------------------
 
+
 @router.post("/export-data", response_model=TaskResponse)
 async def export_user_data_endpoint(
     export_format: str = "json",
@@ -48,6 +49,7 @@ async def export_user_data_endpoint(
 # -------------------------------------------------------------------------
 # Onboarding Task APIs
 # -------------------------------------------------------------------------
+
 
 @router.get("/", response_model=list[OnboardingTaskRead])
 def list_tasks(
