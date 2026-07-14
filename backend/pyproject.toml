@@ -1,0 +1,118 @@
+[project]
+name = "indic-corpus-platform"
+version = "0.1.0"
+description = "Indic languages collections backend"
+keywords = ["indic", "languages", "nlp", "corpus"]
+classifiers = [
+    "Development Status :: 1 - Alpha",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Text Processing :: Linguistic",
+]
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi",
+    "uvicorn[standard]",
+    "gunicorn",
+    "sqlmodel",
+    "psycopg2-binary",
+    "pydantic-settings",
+    "alembic",
+    "minio",
+    "python-jose[cryptography]",
+    "bcrypt",
+    "python-multipart",
+    "celery[redis]",
+    "redis",
+    "flower",
+    "celery-redbeat",
+
+    "email-validator",
+    "sqlalchemy",
+    "requests",
+    "geoalchemy2",
+    "shapely>=2.1.1",
+    "posthog",
+    "moviepy",
+    "pypdf>=4.0",
+    "python-magic>=0.4.27",
+    "regex",
+    "httpx>=0.28.1",
+    "zxcvbn",
+    "pyrefly>=0.64.1",
+    "vulture>=2.16",
+    "pytest>=9.0.3",
+]
+
+[project.optional-dependencies]
+devdependencies = [
+    "ruff>=0.12.9",
+    "pre-commit>=4.3.0",
+    "pytest>=8.3.5",
+    "pytest-asyncio>=1.0.0",
+    "pytest-cov>=6.2.1",
+    "mypy>=1.15.0",
+    "pyrefly>=0.64.1",
+    "vulture>=2.14",
+    "bandit>=1.8.0",
+    "commitizen>=4.0.0",
+    "pyupgrade>=3.21",
+    "pytest-xdist>=3.6",
+    "schemathesis>=3.0",
+]
+
+[tool.ruff]
+target-version = "py313"
+line-length = 80
+exclude = ["alembic"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "D"]
+
+[tool.ruff.lint.per-file-ignores]
+"alembic/**" = ["ALL"]
+"tests/**" = ["D100", "D101", "D102", "D103", "D104", "D105", "D107"]
+"app/schemas/**" = ["D102", "D106"]
+"app/models/**" = ["D100", "D105"]
+"app/api/**" = ["D100", "D103", "D104"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.mypy]
+python_version = "3.13"
+strict = true
+explicit_package_bases = true
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+# Exclude manual integration tests from automated runs
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+
+[tool.pyrefly]
+python-version = "3.13.0"
+preset = "legacy"
+ignore-missing-imports = ["*"]
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.3.0",
+    "pyupgrade>=3.21.2",
+    "ruff>=0.15.12",
+    "ty>=0.0.34",
+]
+
+[tool.bandit]
+skips = ["B101", "B106", "B108", "B404", "B603"]

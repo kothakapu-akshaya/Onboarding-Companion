@@ -1,0 +1,41 @@
+.venv/
+
+*.pyc
+__pycache__/
+
+.pytest_cache/
+.coverage
+.ipynb_checkpoints/
+dist/
+build/
+*.egg-info/
+
+.env
+.env_prod
+logs/
+
+# Databases
+*.sqlite
+test.db
+
+# Generated documentation files
+*er_diagram*
+*_er_*
+*.dot
+
+# IDE / Editor specific
+.idea/
+.vscode/
+*.DS_Store
+
+# CRUSH
+QWEN.md
+CRUSH.md
+crush.db
+crush.db-shm
+crush.db-wal
+init
+
+.gitlab-ci-local/
+
+*.log

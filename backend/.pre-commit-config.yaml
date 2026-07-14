@@ -1,0 +1,98 @@
+repos:
+  - repo: https://github.com/commitizen-tools/commitizen
+    rev: v4.15.1
+    hooks:
+      - id: commitizen
+        stages: [commit-msg]
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-added-large-files
+        stages: [pre-commit]
+      - id: check-merge-conflict
+        stages: [pre-commit]
+      - id: check-json
+        stages: [pre-commit]
+      - id: pretty-format-json
+        args: ['--no-sort-keys']
+        stages: [pre-commit]
+      - id: check-toml
+        stages: [pre-commit]
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.15.12
+    hooks:
+      - id: ruff
+        stages: [pre-commit]
+      - id: ruff
+        name: ruff (docstrings - warnings only)
+        args: [--select, D, --exit-zero]
+        stages: [pre-commit]
+      - id: ruff-format
+        args: [--check]
+        stages: [pre-commit]
+
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.9.4
+    hooks:
+      - id: bandit
+        args: ["-c", "pyproject.toml"]
+        additional_dependencies: ["bandit[toml]"]
+        files: ^app/
+        stages: [pre-commit]
+
+  - repo: https://github.com/facebook/pyrefly-pre-commit
+    rev: 0.64.1
+    hooks:
+      - id: pyrefly-check
+        args: ["--project-excludes", "tests/**", "alembic/**", "docs/**"]
+        stages: [pre-commit]
+
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v3.21.2
+    hooks:
+      - id: pyupgrade
+        args: [--py313-plus]
+        exclude: ^(tests/|alembic/|docs/)
+        stages: [pre-commit]
+
+  - repo: local
+    hooks:
+      - id: vulture
+        name: vulture
+        entry: uv run vulture app vulture_whitelist.py --exclude tests,alembic,docs --min-confidence 100 --ignore-names "cls,exc_tb,__context"
+        language: system
+        types: [python]
+        pass_filenames: false
+        stages: [pre-commit]
+      - id: schemathesis
+        name: schemathesis
+        entry: bash -c 'uv run --env-file .env python -c "from app.main import _fastapi_app; import json; json.dump(_fastapi_app.openapi(), open(\"openapi.json\", \"w\"))" && uv run --env-file .env schemathesis run http://localhost:8000/api/v1/openapi.json --checks all || true'
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-push]
+      - id: alembic-check
+        name: alembic check
+        entry: bash -c 'python -c "import psycopg2; psycopg2.connect(host=\"localhost\", port=5432, dbname=\"postgres\")" 2>/dev/null && uv run alembic check || echo "alembic - postgres not running, skipping"'
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-push]
+      - id: pre-push-check
+        name: full codebase check
+        entry: uv run pre-commit
+        args: [run, --all-files]
+        language: system
+        always_run: true
+        pass_filenames: false
+        stages: [pre-push]
+      - id: pytest-cov
+        name: pytest coverage
+        entry: uv run --extra devdependencies pytest -n auto --cov=app --cov-report=term-missing --cov-fail-under=70
+        language: system
+        types: [python]
+        pass_filenames: false
+        always_run: true
+        stages: [pre-push]

@@ -1,0 +1,234 @@
+# Test-specific Makefile for corpus-server-app
+# Provides convenient commands for running different types of tests
+
+.PHONY: help test test-unit test-integration test-security test-all test-watch test-coverage test-fast clean-test setup-test-env
+
+# Default target
+help: ## Show this help message
+	@echo "Corpus Server Test Commands"
+	@echo "=========================="
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
+
+# Environment setup
+setup-test-env: ## Set up test environment
+	@echo "🔧 Setting up test environment..."
+	@/home/ranjithraj/projects/corpus/corpus-server-app/.venv/bin/pip install -e .
+	@/home/ranjithraj/projects/corpus/corpus-server-app/.venv/bin/pip install pytest pytest-cov pytest-xdist pytest-asyncio pytest-mock pytest-watch
+	@echo "✅ Test environment ready"
+
+# Basic test commands
+test: test-unit ## Run unit tests (default)
+
+test-unit: ## Run unit tests only
+	@echo "🧪 Running unit tests..."
+	@./scripts/test-runner.sh unit
+
+test-integration: ## Run integration tests
+	@echo "🔗 Running integration tests..."
+	@./scripts/test-runner.sh integration
+
+test-security: ## Run security tests
+	@echo "🔒 Running security tests..."
+	@./scripts/test-runner.sh security
+
+test-all: ## Run all tests
+	@echo "🚀 Running all tests..."
+	@./scripts/test-runner.sh all
+
+# Specialized test commands
+test-auth: ## Run authentication-related tests
+	@echo "🔐 Running authentication tests..."
+	@./scripts/test-runner.sh auth
+
+test-validation: ## Run validation tests
+	@echo "✅ Running validation tests..."
+	@./scripts/test-runner.sh validation
+
+test-api: ## Run API endpoint tests
+	@echo "🌐 Running API tests..."
+	@./scripts/test-runner.sh api
+
+test-fast: ## Run fast tests only (exclude slow tests)
+	@echo "⚡ Running fast tests..."
+	@./scripts/test-runner.sh fast
+
+test-slow: ## Run slow tests only
+	@echo "🐌 Running slow tests..."
+	@./scripts/test-runner.sh slow
+
+test-failed: ## Re-run only failed tests from last run
+	@echo "🔄 Re-running failed tests..."
+	@./scripts/test-runner.sh failed
+
+# Coverage and reporting
+test-coverage: ## Run tests with coverage report
+	@echo "📊 Running tests with coverage..."
+	@./scripts/test-runner.sh coverage
+
+test-coverage-html: ## Run tests with HTML coverage report
+	@echo "📊 Generating HTML coverage report..."
+	@./scripts/test-runner.sh coverage --html-cov
+	@echo "📄 Coverage report: file://$(PWD)/htmlcov/index.html"
+
+# Parallel execution
+test-parallel: ## Run tests in parallel
+	@echo "⚡ Running tests in parallel..."
+	@./scripts/test-runner.sh all --parallel
+
+test-unit-parallel: ## Run unit tests in parallel
+	@echo "⚡ Running unit tests in parallel..."
+	@./scripts/test-runner.sh unit --parallel
+
+# Watch mode
+test-watch: ## Watch for changes and re-run tests
+	@echo "👀 Watching for changes..."
+	@./scripts/test-runner.sh watch
+
+test-watch-unit: ## Watch unit tests for changes
+	@echo "👀 Watching unit tests..."
+	@./scripts/test-runner.sh watch tests/unit/
+
+# Verbose and debugging
+test-verbose: ## Run tests with verbose output
+	@echo "🔍 Running tests with verbose output..."
+	@./scripts/test-runner.sh all --verbose
+
+test-debug: ## Run tests with debugging options
+	@echo "🐛 Running tests in debug mode..."
+	@pytest tests/ -v --tb=long --capture=no
+
+test-pdb: ## Run tests with debugger on failure
+	@echo "🐛 Running tests with debugger..."
+	@pytest tests/ --pdb -x
+
+# Database-specific tests
+test-db: ## Run database-dependent tests
+	@echo "🗄️ Running database tests..."
+	@pytest -m database -v
+
+test-no-db: ## Run tests without database dependency
+	@echo "🚫 Running tests without database..."
+	@pytest -m "not database" -v
+
+# Performance testing
+test-benchmark: ## Run performance benchmark tests
+	@echo "⏱️ Running benchmark tests..."
+	@pytest tests/ --benchmark-only --benchmark-sort=mean || echo "No benchmark tests found"
+
+# Linting and code quality
+lint: ## Run code linting
+	@echo "🔍 Running linters..."
+	@ruff check app/ tests/
+	@black --check app/ tests/
+	@isort --check-only app/ tests/
+
+lint-fix: ## Fix linting issues automatically
+	@echo "🔧 Fixing linting issues..."
+	@ruff check --fix app/ tests/
+	@black app/ tests/
+	@isort app/ tests/
+
+# Type checking
+typecheck: ## Run type checking
+	@echo "🔍 Running type checks..."
+	@mypy app/ || true
+
+# Cleanup
+clean-test: ## Clean test artifacts
+	@echo "🧹 Cleaning test artifacts..."
+	@./scripts/test-runner.sh cleanup
+
+clean-cache: ## Clean pytest cache
+	@echo "🧹 Cleaning pytest cache..."
+	@rm -rf .pytest_cache/
+	@find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
+	@find . -name "*.pyc" -delete 2>/dev/null || true
+
+clean-coverage: ## Clean coverage reports
+	@echo "🧹 Cleaning coverage reports..."
+	@rm -rf htmlcov/
+	@rm -f .coverage coverage.xml
+
+clean-all: clean-test clean-cache clean-coverage ## Clean all test-related files
+
+# Statistics and reporting
+test-stats: ## Show test statistics
+	@./scripts/test-runner.sh stats
+
+test-list: ## List all available tests
+	@echo "📋 Available tests:"
+	@pytest --collect-only -q
+
+test-markers: ## Show available test markers
+	@echo "🏷️ Available test markers:"
+	@pytest --markers
+
+# CI/CD helpers
+ci-test: ## Run tests in CI mode
+	@echo "🏗️ Running CI tests..."
+	@pytest tests/ --cov=app --cov-report=xml --cov-report=term-missing --junitxml=junit/test-results.xml -v
+
+ci-lint: ## Run linting in CI mode
+	@echo "🏗️ Running CI linting..."
+	@ruff check app/ tests/
+	@black --check app/ tests/
+	@isort --check-only app/ tests/
+
+# Development helpers
+test-new: ## Run only tests added in current branch (git)
+	@echo "🆕 Running new tests..."
+	@git diff --name-only HEAD~1 | grep "test_.*\.py" | xargs pytest -v || echo "No new tests found"
+
+test-changed: ## Run tests for changed files
+	@echo "📝 Running tests for changed files..."
+	@python -c "import subprocess; import sys; result = subprocess.run(['git', 'diff', '--name-only', 'HEAD~1'], capture_output=True, text=True); changed_files = result.stdout.strip().split('\n'); test_files = []; [test_files.append(file.replace('app/', 'tests/').replace('.py', '_test.py')) if file.endswith('.py') and not file.startswith('test_') else test_files.append('tests/test_' + file.replace('app/', '').replace('.py', '.py')) if file.endswith('.py') and not file.startswith('test_') else test_files.append(file) for file in changed_files if file.endswith('.py')]; [subprocess.run(['pytest'] + test_files + ['-v']) if test_files else print('No relevant test files found')]"
+
+# Quick development cycle
+quick: test-unit lint ## Quick development cycle (unit tests + linting)
+	@echo "✅ Quick check completed"
+
+full: test-all lint typecheck ## Full development cycle (all tests + linting + typecheck)
+	@echo "✅ Full check completed"
+
+# Docker-based testing (if using Docker)
+test-docker: ## Run tests in Docker container
+	@echo "🐳 Running tests in Docker..."
+	@docker-compose -f docker-compose.test.yml run --rm test pytest tests/
+
+# Environment variables help
+test-env-help: ## Show environment variables for testing
+	@echo "🌍 Testing Environment Variables:"
+	@echo "================================="
+	@echo "RUN_INTEGRATION_TESTS=1      Enable integration tests"
+	@echo "RUN_SECURITY_TESTS=1         Enable security tests"  
+	@echo "TEST_DATABASE_URL=<url>      Test database connection"
+	@echo "PYTEST_FAST_MODE=1           Skip slow tests globally"
+	@echo "REDIS_URL=<url>              Redis connection for tests"
+	@echo ""
+	@echo "Current values:"
+	@echo "RUN_INTEGRATION_TESTS=$${RUN_INTEGRATION_TESTS:-Not set}"
+	@echo "RUN_SECURITY_TESTS=$${RUN_SECURITY_TESTS:-Not set}"
+	@echo "TEST_DATABASE_URL=$${TEST_DATABASE_URL:-Not set}"
+	@echo "PYTEST_FAST_MODE=$${PYTEST_FAST_MODE:-Not set}"
+
+# Test-specific dependencies
+install-test-deps: ## Install test dependencies
+	@echo "📦 Installing test dependencies..."
+	@pip install pytest pytest-cov pytest-xdist pytest-asyncio pytest-mock pytest-watch pytest-benchmark
+	@pip install ruff black isort mypy
+	@echo "✅ Test dependencies installed"
+
+# Make scripts executable
+setup-scripts: ## Make test scripts executable
+	@chmod +x scripts/test-runner.sh
+	@echo "✅ Scripts are now executable"
+
+# Default environment setup for new developers
+init: setup-test-env install-test-deps setup-scripts ## Initialize testing environment for new developers
+	@echo "🎉 Testing environment fully initialized!"
+	@echo ""
+	@echo "Quick start:"
+	@echo "  make test           # Run unit tests"
+	@echo "  make test-all       # Run all tests"
+	@echo "  make test-coverage  # Run with coverage"
+	@echo "  make help           # Show all commands"

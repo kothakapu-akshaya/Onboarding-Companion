@@ -1,0 +1,82 @@
+[pytest]
+# Pytest configuration file for corpus-server-app
+
+# Test discovery patterns
+python_files = test_*.py *_test.py
+python_classes = Test* *Tests
+python_functions = test_*
+
+# Test paths
+testpaths = tests
+
+# Minimum version
+minversion = 6.0
+
+# Add options that are always used
+addopts = 
+    # Show extra test summary info for (f)ailed, (E)rror, (s)kipped, (x)failed, (X)passed, (p)passed, (P)passed with output, (a)ll except passed
+    -ra
+    # Show local variables in tracebacks
+    --tb=short
+    # Enable strict mode for markers and config
+    --strict-markers
+    --strict-config
+    # Coverage options (uncomment when coverage is needed)
+    # --cov=app
+    # --cov-report=term-missing
+    # --cov-report=html:htmlcov
+    # --cov-fail-under=80
+    # Disable warnings summary
+    --disable-warnings
+    # Show durations of slowest tests
+    --durations=10
+
+# Custom markers for test categorization
+markers =
+    unit: Unit tests - fast, isolated tests without external dependencies
+    integration: Integration tests - tests with database, API, or external services
+    security: Security tests - authentication, authorization, and vulnerability tests
+    slow: Slow tests - tests that take longer than 1 second to run
+    database: Tests that require database connection
+    api: Tests that make HTTP requests
+    auth: Authentication and authorization related tests
+    validation: Input validation and schema tests
+    otp: OTP (One-Time Password) related tests
+    mock: Tests that use extensive mocking
+    external: Tests that interact with external services
+    redis: Tests that require Redis connection
+    celery: Celery task tests
+    storage: File storage related tests
+    postgis: PostGIS/geographical data tests
+
+# Asyncio configuration
+asyncio_mode = auto
+
+# Log configuration
+log_cli = false
+log_cli_level = INFO
+log_cli_format = %(asctime)s [%(levelname)8s] %(name)s: %(message)s (%(filename)s:%(lineno)d)
+log_cli_date_format = %Y-%m-%d %H:%M:%S
+
+# Warning filters
+filterwarnings =
+    # Ignore specific warnings that are known and acceptable
+    ignore::DeprecationWarning:sqlalchemy.*
+    ignore::PendingDeprecationWarning
+    ignore::UserWarning:jose.*
+    # Convert warnings to errors for our code (helps catch issues early)
+    error::UserWarning:app.*
+    error::DeprecationWarning:app.*
+
+# Test collection patterns
+collect_ignore = [
+    "setup.py",
+    "conftest.py"
+]
+
+# Console output options
+console_output_style = progress
+
+# JUnit XML output (useful for CI/CD)
+# Uncomment the following line if you want JUnit XML reports
+# junit_family = xunit2

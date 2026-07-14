@@ -1,0 +1,102 @@
+{
+  "categories": [
+    {
+      "name": "fables",
+      "title": "Fables",
+      "description": "Traditional stories with moral lessons and mythical characters",
+      "published": true,
+      "rank": 1
+    },
+    {
+      "name": "events",
+      "title": "Events",
+      "description": "Happenings, celebrations, and special occasions",
+      "published": true,
+      "rank": 2
+    },
+    {
+      "name": "music",
+      "title": "Music",
+      "description": "Musical content, songs, instruments, and audio experiences",
+      "published": true,
+      "rank": 3
+    },
+    {
+      "name": "places",
+      "title": "Places",
+      "description": "Locations, landmarks, and geographical content",
+      "published": true,
+      "rank": 4
+    },
+    {
+      "name": "food",
+      "title": "Food",
+      "description": "Culinary content, recipes, and food-related information",
+      "published": true,
+      "rank": 5
+    },
+    {
+      "name": "people",
+      "title": "People",
+      "description": "Individuals, personalities, and human-related content",
+      "published": true,
+      "rank": 6
+    },
+    {
+      "name": "literature",
+      "title": "Literature",
+      "description": "Books, poems, writings, and literary works",
+      "published": true,
+      "rank": 7
+    },
+    {
+      "name": "architecture",
+      "title": "Architecture",
+      "description": "Buildings, structures, and architectural designs",
+      "published": true,
+      "rank": 8
+    },
+    {
+      "name": "skills",
+      "title": "Skills",
+      "description": "Abilities, talents, and learning resources",
+      "published": true,
+      "rank": 9
+    },
+    {
+      "name": "images",
+      "title": "Images",
+      "description": "Visual content, pictures, and graphic materials",
+      "published": true,
+      "rank": 10
+    },
+    {
+      "name": "culture",
+      "title": "Culture",
+      "description": "Cultural traditions, customs, and heritage",
+      "published": true,
+      "rank": 11
+    },
+    {
+      "name": "flora_&_fauna",
+      "title": "Flora & Fauna",
+      "description": "Plants, animals, and natural life forms",
+      "published": true,
+      "rank": 12
+    },
+    {
+      "name": "education",
+      "title": "Education",
+      "description": "Learning materials, courses, and educational content",
+      "published": true,
+      "rank": 13
+    },
+    {
+      "name": "vegetation",
+      "title": "Vegetation",
+      "description": "Plant life, gardening, and botanical content",
+      "published": true,
+      "rank": 14
+    }
+  ]
+}

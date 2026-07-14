@@ -1,0 +1,6 @@
+# This file is intentionally blank. It's a placeholder to ensure this directory is tracked by Git.
+# Git by default does not track empty directories. Adding a .gitkeep file (or any other file)
+# inside an otherwise empty directory allows the directory structure to be versioned.
+# This is a common convention, though not an official Git feature.
+#
+# Feel free to delete this file once you add other files to this directory.
