@@ -30,18 +30,28 @@ function Dashboard() {
 
   useEffect(() => {
     const loadDashboard = async () => {
+      // Load Profile
       try {
-        const [profile, eventData, taskData] = await Promise.all([
-          getProfile(),
-          getEvents(),
-          getTasks(),
-        ]);
-
+        const profile = await getProfile();
         setUser(profile);
-        setEvents(eventData);
+      } catch (error) {
+        console.error("Failed to load profile", error);
+      }
+
+      // Load Tasks
+      try {
+        const taskData = await getTasks();
         setTasks(taskData);
       } catch (error) {
-        console.error("Failed to load dashboard", error);
+        console.error("Failed to load tasks", error);
+      }
+
+      // Load Events
+      try {
+        const eventData = await getEvents();
+        setEvents(eventData);
+      } catch (error) {
+        console.error("Failed to load events", error);
       }
     };
 
@@ -72,16 +82,14 @@ function Dashboard() {
       {tasks.length === 0 ? (
         <p>No tasks available.</p>
       ) : (
-        tasks
-          .slice(0, 2)
-          .map((task) => (
-            <TaskCard
-              key={task.id}
-              title={task.title}
-              status={task.status}
-              buttonText="View"
-            />
-          ))
+        tasks.slice(0, 2).map((task) => (
+          <TaskCard
+            key={task.id}
+            title={task.title}
+            status={task.status}
+            buttonText="View"
+          />
+        ))
       )}
 
       <br />
@@ -91,17 +99,15 @@ function Dashboard() {
       {events.length === 0 ? (
         <p>No upcoming events.</p>
       ) : (
-        events
-          .slice(0, 2)
-          .map((event) => (
-            <EventCard
-              key={event.uid}
-              title={event.name}
-              date={new Date(event.start_date).toLocaleDateString()}
-              location={event.description || "Not specified"}
-              buttonText="View"
-            />
-          ))
+        events.slice(0, 2).map((event) => (
+          <EventCard
+            key={event.uid}
+            title={event.name}
+            date={new Date(event.start_date).toLocaleDateString()}
+            location={event.description || "Not specified"}
+            buttonText="View"
+          />
+        ))
       )}
     </Layout>
   );
