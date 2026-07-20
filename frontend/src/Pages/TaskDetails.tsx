@@ -3,30 +3,39 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import Layout from "../components/Layout";
 import { onboardingTasks } from "../data/onboardingTasks";
-import { completeTask } from "../utils/taskStorage";
+import { getProgress, saveTask } from "../utils/taskStorage";
 
 function TaskDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const task = useMemo(
-    () => onboardingTasks.find((t) => t.id === Number(id)),
-    [id]
-  );
+  const taskId = Number(id);
 
-  const [images, setImages] = useState<File[]>([]);
+  const task = useMemo(
+    () => onboardingTasks.find((t) => t.id === taskId),
+    [taskId]
+  );
 
   if (!task) {
     return (
       <Layout>
-        <h2>Task not found.</h2>
+        <h2>Task not found</h2>
       </Layout>
     );
   }
 
-  const handleImageChange = (
+  const progress = getProgress();
+  const completedTask = progress[taskId];
+
+  const isCompleted = completedTask?.completed ?? false;
+
+  const [previewUrls, setPreviewUrls] = useState<string[]>(
+    completedTask?.images || []
+  );
+
+  async function handleImageChange(
     e: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  ) {
     if (!e.target.files) return;
 
     const files = Array.from(e.target.files);
@@ -36,21 +45,35 @@ function TaskDetails() {
       return;
     }
 
-    setImages(files);
-  };
+    const base64Images = await Promise.all(
+      files.map(
+        (file) =>
+          new Promise<string>((resolve, reject) => {
+            const reader = new FileReader();
 
-  const handleComplete = () => {
-    if (images.length === 0) {
+            reader.onload = () => resolve(reader.result as string);
+            reader.onerror = reject;
+
+            reader.readAsDataURL(file);
+          })
+      )
+    );
+
+    setPreviewUrls(base64Images);
+  }
+
+  function handleComplete() {
+    if (previewUrls.length === 0) {
       alert("Please upload at least one screenshot.");
       return;
     }
+    console.log(previewUrls);
+    saveTask(taskId, previewUrls);
 
-    completeTask(task.id);
-
-    alert("Task completed successfully!");
+    alert("Task marked as completed.");
 
     navigate("/tasks");
-  };
+  }
 
   return (
     <Layout>
@@ -73,36 +96,61 @@ function TaskDetails() {
       <br />
       <br />
 
-      <h3>Upload Screenshots</h3>
-
-      <input
-        type="file"
-        multiple
-        accept="image/*"
-        onChange={handleImageChange}
-      />
-
-      <p>Minimum: 1 image | Maximum: 5 images</p>
-
-      <br />
-
-      {images.length > 0 && (
+      {!isCompleted && (
         <>
-          <h3>Selected Images</h3>
+          <h3>Upload Evidence</h3>
 
-          <ul>
-            {images.map((image, index) => (
-              <li key={index}>{image.name}</li>
-            ))}
-          </ul>
+          <input
+            type="file"
+            multiple
+            accept="image/*"
+            onChange={handleImageChange}
+          />
+
+          <p>Minimum 1 image • Maximum 5 images</p>
 
           <br />
         </>
       )}
 
-      <button onClick={handleComplete}>
-        Mark as Completed
-      </button>
+      {(completedTask?.images?.length || previewUrls.length > 0) && (
+        <>
+          <h3>Evidence</h3>
+
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "15px",
+            }}
+          >
+            {(completedTask?.images || previewUrls).map((image, index) => (
+              <img
+                key={index}
+                src={image}
+                alt={`Evidence ${index + 1}`}
+                style={{
+                  width: "180px",
+                  height: "120px",
+                  objectFit: "cover",
+                  borderRadius: "8px",
+                  border: "1px solid #ddd",
+                }}
+              />
+            ))}
+          </div>
+
+          <br />
+        </>
+      )}
+
+      {!isCompleted ? (
+        <button onClick={handleComplete}>
+          Mark as Completed
+        </button>
+      ) : (
+        <button disabled>✅ Task Completed</button>
+      )}
 
       <br />
       <br />

@@ -2,9 +2,12 @@ import { useEffect, useState } from "react";
 
 import Layout from "../components/Layout";
 import ProgressCard from "../components/ProgressCard";
+import TaskCard from "../components/TaskCard";
 
 import { getProfile } from "../services/user";
+
 import { onboardingTasks } from "../data/onboardingTasks";
+import { getProgress } from "../utils/taskStorage";
 
 type UserProfile = {
   name: string;
@@ -28,43 +31,47 @@ function Dashboard() {
     loadProfile();
   }, []);
 
-  // Temporary values
+  const progress = getProgress();
+
+  const completedTasks = onboardingTasks.filter(
+    (task) => progress[task.id]?.completed
+  ).length;
+
   const totalTasks = onboardingTasks.length;
-  const completedTasks = 0;
+
+  const pendingTasks = onboardingTasks.filter(
+    (task) => !progress[task.id]?.completed
+  );
 
   return (
     <Layout>
-      <h1>Welcome, {user?.name ?? "User"} 👋</h1>
+      <h1>Welcome, {user ? user.name : "User"} 👋</h1>
 
       <br />
 
       <ProgressCard
         totalTasks={totalTasks}
         completedTasks={completedTasks}
-        upcomingEvents={0}
       />
 
       <br />
 
-      <h2>Onboarding Progress</h2>
-
-      <p>
-        Complete all onboarding checklist items to finish your internship setup.
-      </p>
+      <h2>Pending Tasks</h2>
 
       <br />
 
-      <p>
-        Total Checklist Items: <strong>{totalTasks}</strong>
-      </p>
-
-      <p>
-        Completed: <strong>{completedTasks}</strong>
-      </p>
-
-      <p>
-        Remaining: <strong>{totalTasks - completedTasks}</strong>
-      </p>
+      {pendingTasks.length === 0 ? (
+        <p>🎉 Congratulations! You have completed all onboarding tasks.</p>
+      ) : (
+        pendingTasks.slice(0, 3).map((task) => (
+          <TaskCard
+            key={task.id}
+            id={task.id}
+            title={task.title}
+            status="Pending"
+          />
+        ))
+      )}
     </Layout>
   );
 }
