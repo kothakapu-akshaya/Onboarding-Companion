@@ -9,11 +9,9 @@ function TaskDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const taskId = Number(id);
-
   const task = useMemo(
-    () => onboardingTasks.find((t) => t.id === taskId),
-    [taskId]
+    () => onboardingTasks.find((t) => t.id === Number(id)),
+    [id]
   );
 
   if (!task) {
@@ -24,14 +22,19 @@ function TaskDetails() {
     );
   }
 
+  // TypeScript now knows task definitely exists
+  const currentTask = task;
+
   const progress = getProgress();
-  const completedTask = progress[taskId];
+  const completedTask = progress[currentTask.id];
 
   const isCompleted = completedTask?.completed ?? false;
 
   const [previewUrls, setPreviewUrls] = useState<string[]>(
     completedTask?.images || []
   );
+
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   async function handleImageChange(
     e: React.ChangeEvent<HTMLInputElement>
@@ -67,8 +70,8 @@ function TaskDetails() {
       alert("Please upload at least one screenshot.");
       return;
     }
-    console.log(previewUrls);
-    saveTask(taskId, previewUrls);
+
+    saveTask(currentTask.id, previewUrls);
 
     alert("Task marked as completed.");
 
@@ -77,11 +80,11 @@ function TaskDetails() {
 
   return (
     <Layout>
-      <h1>{task.title}</h1>
+      <h1>{currentTask.title}</h1>
 
       <br />
 
-      <p>{task.description}</p>
+      <p>{currentTask.description}</p>
 
       <br />
 
@@ -113,7 +116,7 @@ function TaskDetails() {
         </>
       )}
 
-      {(completedTask?.images?.length || previewUrls.length > 0) && (
+      {previewUrls.length > 0 && (
         <>
           <h3>Evidence</h3>
 
@@ -124,15 +127,17 @@ function TaskDetails() {
               gap: "15px",
             }}
           >
-            {(completedTask?.images || previewUrls).map((image, index) => (
+            {previewUrls.map((image, index) => (
               <img
                 key={index}
                 src={image}
                 alt={`Evidence ${index + 1}`}
+                onClick={() => setSelectedImage(image)}
                 style={{
                   width: "180px",
                   height: "120px",
                   objectFit: "cover",
+                  cursor: "pointer",
                   borderRadius: "8px",
                   border: "1px solid #ddd",
                 }}
@@ -149,7 +154,9 @@ function TaskDetails() {
           Mark as Completed
         </button>
       ) : (
-        <button disabled>✅ Task Completed</button>
+        <button disabled>
+          ✅ Task Completed
+        </button>
       )}
 
       <br />
@@ -158,6 +165,32 @@ function TaskDetails() {
       <button onClick={() => navigate("/tasks")}>
         ← Back to Checklist
       </button>
+
+      {selectedImage && (
+        <div
+          onClick={() => setSelectedImage(null)}
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0,0,0,0.8)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 9999,
+            cursor: "pointer",
+          }}
+        >
+          <img
+            src={selectedImage}
+            alt="Preview"
+            style={{
+              maxWidth: "90%",
+              maxHeight: "90%",
+              borderRadius: "10px",
+            }}
+          />
+        </div>
+      )}
     </Layout>
   );
 }
