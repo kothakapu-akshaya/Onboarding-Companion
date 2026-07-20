@@ -30,9 +30,9 @@ function Tasks() {
       {onboardingTasks.map((task) => (
         <TaskCard
           key={task.id}
+          id={task.id}
           title={task.title}
           status="Pending"
-          buttonText="Start"
         />
       ))}
     </Layout>
