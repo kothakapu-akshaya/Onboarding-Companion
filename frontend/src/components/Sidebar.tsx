@@ -3,7 +3,6 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   FaHome,
   FaTasks,
-  FaCalendarAlt,
   FaUser,
   FaSignOutAlt,
 } from "react-icons/fa";
@@ -22,7 +21,7 @@ function Sidebar() {
   return (
     <aside className="sidebar">
       <div className="logo">
-        <h2> Intern Onboarding-Companion</h2>
+        <h2>Intern Onboarding Companion</h2>
       </div>
 
       <nav className="menu">
@@ -39,15 +38,7 @@ function Sidebar() {
           className={location.pathname === "/tasks" ? "active" : ""}
         >
           <FaTasks />
-          <span>My Tasks</span>
-        </Link>
-
-        <Link
-          to="/events"
-          className={location.pathname === "/events" ? "active" : ""}
-        >
-          <FaCalendarAlt />
-          <span>Events</span>
+          <span>Onboarding Checklist</span>
         </Link>
 
         <Link
