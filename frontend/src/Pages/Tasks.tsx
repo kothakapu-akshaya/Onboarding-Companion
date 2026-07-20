@@ -2,8 +2,11 @@ import Layout from "../components/Layout";
 import TaskCard from "../components/TaskCard";
 
 import { onboardingTasks } from "../data/onboardingTasks";
+import { getProgress } from "../utils/taskStorage";
 
 function Tasks() {
+  const progress = getProgress();
+
   return (
     <Layout>
       <h1>Onboarding Checklist</h1>
@@ -32,7 +35,7 @@ function Tasks() {
           key={task.id}
           id={task.id}
           title={task.title}
-          status="Pending"
+          status={progress[task.id]?.completed ? "Completed" : "Pending"}
         />
       ))}
     </Layout>

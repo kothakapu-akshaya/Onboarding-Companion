@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import Layout from "../components/Layout";
 import { onboardingTasks } from "../data/onboardingTasks";
+import { completeTask } from "../utils/taskStorage";
 
 function TaskDetails() {
   const { id } = useParams();
@@ -43,6 +44,8 @@ function TaskDetails() {
       alert("Please upload at least one screenshot.");
       return;
     }
+
+    completeTask(task.id);
 
     alert("Task completed successfully!");
 
