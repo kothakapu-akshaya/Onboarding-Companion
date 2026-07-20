@@ -1,13 +1,18 @@
-import "../styles/TaskCard.css";
 import { useNavigate } from "react-router-dom";
 
-type TaskCardProps = {
+import "../styles/TaskCard.css";
+
+type Props = {
   id: number;
   title: string;
   status: string;
 };
 
-function TaskCard({ id, title, status }: TaskCardProps) {
+function TaskCard({
+  id,
+  title,
+  status,
+}: Props) {
   const navigate = useNavigate();
 
   return (
@@ -15,11 +20,25 @@ function TaskCard({ id, title, status }: TaskCardProps) {
       <h3>{title}</h3>
 
       <p>
-        Status: <strong>{status}</strong>
+        Status:{" "}
+        <strong
+          style={{
+            color:
+              status === "Completed"
+                ? "green"
+                : "orange",
+          }}
+        >
+          {status}
+        </strong>
       </p>
 
-      <button onClick={() => navigate(`/tasks/${id}`)}>
-        {status === "Completed" ? "View" : "Open"}
+      <button
+        onClick={() => navigate(`/tasks/${id}`)}
+      >
+        {status === "Completed"
+          ? "View"
+          : "Start"}
       </button>
     </div>
   );

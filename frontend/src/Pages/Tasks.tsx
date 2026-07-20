@@ -30,12 +30,29 @@ function Tasks() {
       <br />
       <br />
 
+      <h3>
+        Completed{" "}
+        {
+          onboardingTasks.filter(
+            (task) => progress[task.id]?.completed
+          ).length
+        }
+        {" / "}
+        {onboardingTasks.length}
+      </h3>
+
+      <br />
+
       {onboardingTasks.map((task) => (
         <TaskCard
           key={task.id}
           id={task.id}
           title={task.title}
-          status={progress[task.id]?.completed ? "Completed" : "Pending"}
+          status={
+            progress[task.id]?.completed
+              ? "Completed"
+              : "Pending"
+          }
         />
       ))}
     </Layout>
