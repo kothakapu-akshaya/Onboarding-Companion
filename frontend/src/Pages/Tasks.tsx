@@ -1,54 +1,40 @@
-import { useEffect, useState } from "react";
-
 import Layout from "../components/Layout";
 import TaskCard from "../components/TaskCard";
 
-import { getTasks } from "../services/task";
-import type { Task } from "../services/task";
+import { onboardingTasks } from "../data/onboardingTasks";
 
 function Tasks() {
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        const data = await getTasks();
-        setTasks(data);
-      } catch (error) {
-        console.error("Failed to fetch tasks:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchTasks();
-  }, []);
-
   return (
     <Layout>
-      <h1>My Tasks</h1>
+      <h1>Onboarding Checklist</h1>
 
       <br />
 
-      {loading ? (
-        <p>Loading tasks...</p>
-      ) : tasks.length === 0 ? (
-        <p>No tasks available.</p>
-      ) : (
-        tasks.map((task) => (
-          <TaskCard
-            key={task.id}
-            title={task.title}
-            status={task.status}
-            buttonText={
-              task.status.toLowerCase() === "completed"
-                ? "View"
-                : "Mark Complete"
-            }
-          />
-        ))
-      )}
+      <p>
+        Complete each onboarding task to finish your internship setup.
+      </p>
+
+      <br />
+
+      <a
+        href="https://code.swecha.org/internships/intern-instructions/-/blob/main/workbench-setup.md?ref_type=heads"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        📖 Read Official Workbench Setup Guide
+      </a>
+
+      <br />
+      <br />
+
+      {onboardingTasks.map((task) => (
+        <TaskCard
+          key={task.id}
+          title={task.title}
+          status="Pending"
+          buttonText="Start"
+        />
+      ))}
     </Layout>
   );
 }
