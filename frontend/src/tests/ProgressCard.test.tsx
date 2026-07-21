@@ -6,7 +6,7 @@ import ProgressCard from "../components/ProgressCard";
 describe("ProgressCard Component", () => {
   it("displays completed percentage correctly", () => {
     render(
-      <ProgressCard totalTasks={10} completedTasks={7} upcomingEvents={2} />
+      <ProgressCard totalTasks={10} completedTasks={7} />
     );
 
     expect(screen.getByText("70% Completed")).toBeInTheDocument();
@@ -14,10 +14,10 @@ describe("ProgressCard Component", () => {
 
   it("displays task information", () => {
     render(
-      <ProgressCard totalTasks={5} completedTasks={2} upcomingEvents={1} />
+      <ProgressCard totalTasks={5} completedTasks={2} />
     );
 
-    expect(screen.getByText("Assigned Tasks")).toBeInTheDocument();
+    expect(screen.getByText("Total Tasks")).toBeInTheDocument();
     expect(screen.getByText("Completed")).toBeInTheDocument();
     expect(screen.getByText("Pending")).toBeInTheDocument();
   });
