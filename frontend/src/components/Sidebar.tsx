@@ -22,6 +22,16 @@ function Sidebar() {
     <aside className="sidebar">
       <div className="logo">
         <h2>Intern Onboarding Companion</h2>
+<p
+  style={{
+    fontSize: "12px",
+    color: "#666",
+    marginTop: "6px",
+    textAlign: "center",
+  }}
+>
+  Internship Workbench
+</p>
       </div>
 
       <nav className="menu">
