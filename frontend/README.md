@@ -2,9 +2,9 @@
 
 ## Overview
 
-The Intern Onboarding Companion is a full-stack web application designed to simplify the onboarding process for new employees. Instead of relying on scattered emails, messages, and documents, the application provides a centralized platform where employees can access onboarding information, monitor their progress, view assigned tasks, participate in company events, and manage their profile.
+The Intern Onboarding Companion is a full-stack web application designed to simplify the onboarding process for new employees. Instead of relying on scattered emails, messages, and documents, the application provides a centralized platform where employees can securely log in, access onboarding information, monitor their progress, view company events, and manage their profile.
 
-The frontend is built using React and TypeScript, while the backend is developed using FastAPI. The application communicates with the backend through REST APIs and provides a secure and responsive onboarding experience.
+The frontend is built using React, TypeScript, and Vite, while the backend is powered by FastAPI. The application communicates with the backend through REST APIs and provides a responsive and secure onboarding experience.
 
 ---
 
@@ -38,6 +38,7 @@ The frontend is built using React and TypeScript, while the backend is developed
 - Husky
 - lint-staged
 - Vitest
+- Vercel
 
 ---
 
@@ -46,77 +47,76 @@ The frontend is built using React and TypeScript, while the backend is developed
 - Secure JWT Authentication
 - Protected Routes
 - Employee Dashboard
-- Employee Profile
-- Task Management
+- User Profile
 - Company Events
 - Onboarding Progress Tracking
 - REST API Integration
 - Responsive User Interface
+- Production Deployment with Vercel
 
 ---
 
 ## Backend Integration
 
-The following backend APIs have been integrated into the frontend:
+The frontend is integrated with the following backend APIs:
 
 | API | Status |
 |------|--------|
-| Login (`POST /api/v1/auth/login`) | Completed |
-| Current User (`GET /api/v1/auth/me`) | Completed |
-| Tasks (`GET /api/v1/tasks`) | Completed |
-| Events (`GET /api/v1/events`) | Completed |
+| POST `/api/v1/auth/login` |  Completed |
+| GET `/api/v1/auth/me` |  Completed |
+| GET `/api/v1/events` |  Completed |
+| GET `/api/v1/users/{user_identifier}/profile` |  Completed |
+
+---
+
+## API Configuration
+
+The frontend communicates with the backend using an environment variable.
+
+Create a `.env` file inside the frontend directory:
+
+```env
+VITE_API_URL=https://api.corpus.swecha.org/api/v1
+```
 
 ---
 
 ## Authentication
 
-- Users authenticate using the backend Login API.
-- JWT tokens are securely stored in the browser.
-- Axios automatically attaches the authentication token to protected requests.
-- Protected routes prevent unauthorized users from accessing application pages.
+- Users log in using their phone number and password.
+- JWT authentication is implemented using the backend Login API.
+- Access tokens are stored in the browser.
+- Protected routes prevent unauthorized access to application pages.
+- Authenticated requests automatically include the JWT token.
 
 ---
 
 ## Dashboard
 
-The Dashboard provides an overview of the employee onboarding process by displaying:
+The Dashboard provides an overview of the onboarding process by displaying:
 
-- Logged-in employee information
-- Overall onboarding progress
-- Assigned onboarding tasks
-- Upcoming company events
+- Logged-in user information
+- Onboarding progress
+- Company events
+- User profile summary
 
-All dashboard information is fetched dynamically from the backend through REST APIs.
-
----
-
-## Tasks
-
-The Tasks module is fully integrated with the backend Task APIs.
-
-Users can:
-
-- View assigned onboarding tasks
-- View task status
-- Display task information dynamically from the backend
-- Access updated task information without relying on hardcoded or mock data
-
-The Dashboard also displays a summary of onboarding tasks retrieved from the backend.
+All information is retrieved dynamically from the backend through REST APIs.
 
 ---
 
 ## Profile
 
-The Profile page retrieves employee information from the backend and displays details such as:
+The Profile page displays user information fetched from the backend, including:
 
+- Username
 - Name
-- Email Address
+- Email
 - Phone Number
-- Role
 - Profession
 - Organization
+- User Roles
 
-Additional profile information is displayed whenever it is available from the backend response.
+Additional profile details are displayed whenever available from the backend response.
 
 ---
 
@@ -125,10 +125,9 @@ Additional profile information is displayed whenever it is available from the ba
 The Events page retrieves company events from the backend and displays:
 
 - Event Name
-- Event Date
 - Event Description
-
-Upcoming events displayed on the Dashboard are also fetched from the backend.
+- Event Date
+- Event Status
 
 ---
 
@@ -140,6 +139,8 @@ Upcoming events displayed on the Dashboard are also fetched from the backend.
 git clone <repository-url>
 ```
 
+---
+
 ### Backend Setup
 
 ```bash
@@ -147,17 +148,19 @@ cd backend
 docker compose up --build
 ```
 
-The backend will be available at:
+Backend:
 
-```text
+```
 http://localhost:8000
 ```
 
 Swagger Documentation:
 
-```text
+```
 http://localhost:8000/docs
 ```
+
+---
 
 ### Frontend Setup
 
@@ -167,47 +170,47 @@ npm install
 npm run dev
 ```
 
-The frontend will be available at:
+Frontend:
 
-```text
+```
 http://localhost:5173
 ```
 
 ---
 
-## Development Credentials
+## Production Build
 
-The backend provides seeded users for local development and testing.
+Create a production build:
 
-### Admin User
-
-Phone:
-
-```text
-+919900000000
+```bash
+npm run build
 ```
 
-Password:
+Preview the production build locally:
 
-```text
-SeedAdmin@123
+```bash
+npm run preview
 ```
 
-### Regular User
+---
 
-Phone:
+## Deployment
 
-```text
-+919900000001
+The frontend is deployed using **Vercel**.
+
+### Live Demo
+
+https://intern-onboarding-companion.vercel.app
+
+To deploy manually:
+
+```bash
+npm install -g vercel
+
+vercel
+
+vercel --prod
 ```
-
-Password:
-
-```text
-SeedUser@123
-```
-
-These credentials are intended only for development and testing.
 
 ---
 
@@ -230,7 +233,6 @@ These checks ensure:
 - Consistent code formatting
 - ESLint validation
 - TypeScript type safety
-- Unit testing
 - Successful production build
 
 ---
@@ -238,21 +240,22 @@ These checks ensure:
 ## Project Structure
 
 ```text
-onboarding-companion-fullstack/
+onboarding-companion/
 
 ├── frontend/
 │   ├── src/
-│   │   ├── api/
 │   │   ├── components/
-│   │   ├── Pages/
+│   │   ├── pages/
 │   │   ├── services/
 │   │   ├── routes/
-│   │   └── styles/
-│   └── package.json
+│   │   ├── styles/
+│   │   └── tests/
+│   ├── public/
+│   ├── package.json
+│   └── vite.config.ts
 │
 └── backend/
     ├── app/
-    ├── scripts/
     ├── alembic/
     ├── Dockerfile
     ├── docker-compose.yml
@@ -264,11 +267,12 @@ onboarding-companion-fullstack/
 ## Development Notes
 
 - Axios is used for API communication.
-- Route protection is implemented using React Router.
-- Reusable components are used throughout the application.
-- The frontend communicates with the backend using REST APIs.
+- React Router is used for client-side routing.
+- JWT-based authentication secures protected pages.
+- REST APIs are documented using Swagger.
 - Docker Compose is used for local backend development.
-- Swagger is used for API testing and verification.
+- Vercel is used for frontend deployment.
+- TypeScript provides static type checking.
 
 ---
 
@@ -276,32 +280,33 @@ onboarding-companion-fullstack/
 
 | Feature | Status |
 |----------|--------|
-| Login | Completed |
-| Authentication | Completed |
-| Protected Routes | Completed |
-| Dashboard | Completed |
-| Profile | Completed |
-| Events | Completed |
-| Tasks UI | Completed |
-| Task Backend Integration | Completed |
+| Login |  Completed |
+| JWT Authentication |  Completed |
+| Protected Routes |  Completed |
+| Dashboard |  Completed |
+| Profile |  Completed |
+| Events |  Completed |
+| REST API Integration |  Completed |
+| Production Build |  Completed |
+| Vercel Deployment |  Completed |
+
+---
+
+## Current Limitations
+
+- Some backend endpoints are accessible only to authorized roles.
+- Certain features depend on backend permissions and available APIs.
+- The application relies on the production backend for data.
 
 ---
 
 ## Future Improvements
 
-- Task status updates from the frontend
-- Event registration functionality
-- Profile editing
-- Dashboard analytics
+- Enhanced dashboard analytics
 - Improved responsive design
-- Production deployment
+- Better loading and error states
+- Expanded unit testing
 - Continuous Integration and Continuous Deployment (CI/CD)
-
----
-
-## Deployment
-
-Deployment is currently in progress. The live application URL will be added after deployment.
 
 ---
 
