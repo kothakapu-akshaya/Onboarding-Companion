@@ -1,13 +1,13 @@
 #!/usr/bin/env sh
 
 echo "Running lint-staged..."
-npx lint-staged
+cd frontend && npx lint-staged
 
 echo "Running TypeScript type checking..."
-npm run type-check
+cd frontend && npm run type-check
 
 echo "Running tests..."
-npm test -- --run
+cd frontend && npm test -- --run
 
 echo "Building project..."
-npm run build
+cd frontend && npm run build

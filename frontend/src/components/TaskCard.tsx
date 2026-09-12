@@ -8,11 +8,7 @@ type Props = {
   status: string;
 };
 
-function TaskCard({
-  id,
-  title,
-  status,
-}: Props) {
+function TaskCard({ id, title, status }: Props) {
   const navigate = useNavigate();
 
   return (
@@ -22,23 +18,18 @@ function TaskCard({
       <p>
         Status:{" "}
         <strong
-          style={{
-            color:
-              status === "Completed"
-                ? "green"
-                : "orange",
-          }}
+          className={
+            status === "Completed"
+              ? "task-status-completed"
+              : "task-status-pending"
+          }
         >
           {status}
         </strong>
       </p>
 
-      <button
-        onClick={() => navigate(`/tasks/${id}`)}
-      >
-        {status === "Completed"
-          ? "View"
-          : "Start"}
+      <button type="button" onClick={() => navigate(`/tasks/${id}`)}>
+        {status === "Completed" ? "View" : "Start"}
       </button>
     </div>
   );

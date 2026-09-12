@@ -1,315 +1,112 @@
-# Intern Onboarding Companion
+# Intern Onboarding Companion — Frontend
 
-## Overview
-
-The Intern Onboarding Companion is a full-stack web application designed to simplify the onboarding process for new employees. Instead of relying on scattered emails, messages, and documents, the application provides a centralized platform where employees can securely log in, access onboarding information, monitor their progress, view company events, and manage their profile.
-
-The frontend is built using React, TypeScript, and Vite, while the backend is powered by FastAPI. The application communicates with the backend through REST APIs and provides a responsive and secure onboarding experience.
-
----
+React + TypeScript + Vite frontend for the Intern Onboarding Companion: a
+checklist app that walks interns through the Swecha Workbench setup tasks.
 
 ## Tech Stack
 
-### Frontend
-
-- React
-- TypeScript
-- Vite
-- React Router
-- Axios
-- CSS
-
-### Backend
-
-- FastAPI
-- PostgreSQL
-- Redis
-- Celery
-- MinIO
-- Docker Compose
-
-### Development Tools
-
-- Git
-- GitLab
-- Swagger (OpenAPI)
-- ESLint
-- Prettier
-- Husky
-- lint-staged
-- Vitest
-- Vercel
-
----
+- React 19, TypeScript, Vite
+- React Router, Axios
+- CSS custom properties (design tokens), `data-theme` dark/light mode
+- Vitest + Testing Library, ESLint, Prettier, Husky, lint-staged
 
 ## Features
 
-- Secure JWT Authentication
-- Protected Routes
-- Employee Dashboard
-- User Profile
-- Company Events
-- Onboarding Progress Tracking
-- REST API Integration
-- Responsive User Interface
-- Production Deployment with Vercel
+- **Authentication** — phone-number + password login, JWT stored in the
+  browser, session restored and validated on load, expired-token 401
+  handling, route protection.
+- **Onboarding checklist** — 16 tasks across 4 categories (System Setup,
+  Git & GitLab, AI & Tooling, Swecha Ecosystem).
+- **Evidence upload** — 1–6 screenshots per task (PNG/JPG/GIF, 5 MB
+  max each) uploaded to the onboarding backend (stored in object storage),
+  with a preview dialog and per-image removal.
+- **Progress** — task completion state is stored on the onboarding backend
+  (Postgres) and reflected on the dashboard progress card and checklist.
+- **Legacy data migration** — previously browser-local progress/images are
+  uploaded to the backend automatically once, then removed from
+  `localStorage` (only after successful persistence).
+- **Theme** — light/dark toggle persisted to `localStorage`; defaults to the
+  OS preference.
 
----
+## Architecture: Server-Backed Progress
 
-## Backend Integration
+Task definitions are static in the frontend (`src/data/onboardingTasks.ts`).
+Progress and evidence are persisted on the **onboarding backend**, which is a
+separate service from the Corpus API:
 
-The frontend is integrated with the following backend APIs:
+- Corpus API (`VITE_API_URL`) is used only for login, `/auth/me` and 404
+  check; the onboarding API (`VITE_ONBOARDING_API_URL`) has its own client
+  (`src/api/onboardingAxios.ts`) but reuses the **same JWT** stored under the
+  `token` `localStorage` key, so there is no second login.
+- Evidence files are sent as `multipart/form-data` uploads and never stored
+  in `localStorage` as base64.
+- Evidence previews use backend-signed URLs; the browser never constructs
+  public MinIO/object-storage URLs.
+- `localStorage["onboarding-progress"]` is only retained for the one-time
+  migration of legacy data and is not used as the source of truth.
 
-| API | Status |
-|------|--------|
-| POST `/api/v1/auth/login` |  Completed |
-| GET `/api/v1/auth/me` |  Completed |
-| GET `/api/v1/events` |  Completed |
-| GET `/api/v1/users/{user_identifier}/profile` |  Completed |
+## Directory Structure
 
----
+```text
+src/
+├── api/            # Axios instances (corpus auth + onboarding API, 401 handling)
+├── components/     # Layout, Sidebar, TaskCard, ProgressCard, ProfileCard, ThemeToggle
+├── context/        # AuthProvider/useAuth + OnboardingProvider/useOnboarding
+├── data/           # onboardingTasks.ts (16 tasks)
+├── Pages/          # Login, Dashboard, Tasks, TaskDetails, Profile
+├── routes/         # AppRoutes, ProtectedRoute
+├── services/       # auth.ts (login, getCurrentUser), onboarding.ts (progress + evidence)
+├── styles/         # Component stylesheets using CSS design tokens
+├── tests/          # Vitest unit tests
+├── types/          # Shared TypeScript types (user, onboarding)
+└── utils/          # taskStorage.ts (legacy local persistence), taskMigration.ts
+```
 
-## API Configuration
-
-The frontend communicates with the backend using an environment variable.
-
-Create a `.env` file inside the frontend directory:
+## Environment
 
 ```env
 VITE_API_URL=https://api.corpus.swecha.org/api/v1
+VITE_ONBOARDING_API_URL=http://localhost:8000/api/v1
 ```
 
----
+No secrets belong in `VITE_*` variables — they are exposed to the browser.
 
-## Authentication
+## Scripts
 
-- Users log in using their phone number and password.
-- JWT authentication is implemented using the backend Login API.
-- Access tokens are stored in the browser.
-- Protected routes prevent unauthorized access to application pages.
-- Authenticated requests automatically include the JWT token.
+| Command              | Purpose                                    |
+| -------------------- | ------------------------------------------ |
+| `npm run dev`        | Start the Vite dev server                  |
+| `npm run build`      | Type-check and produce a production build  |
+| `npm run preview`    | Preview the production build locally       |
+| `npm run lint`       | Run ESLint                                 |
+| `npm run format`     | Format all files with Prettier             |
+| `npm run type-check` | Run `tsc --noEmit`                         |
+| `npm test`           | Run tests (use `-- --run` for single pass) |
+| `npm run prepare`    | Install the Husky hook                     |
 
----
-
-## Dashboard
-
-The Dashboard provides an overview of the onboarding process by displaying:
-
-- Logged-in user information
-- Onboarding progress
-- Company events
-- User profile summary
-
-All information is retrieved dynamically from the backend through REST APIs.
-
----
-
-## Profile
-
-The Profile page displays user information fetched from the backend, including:
-
-- Username
-- Name
-- Email
-- Phone Number
-- Profession
-- Organization
-- User Roles
-
-Additional profile details are displayed whenever available from the backend response.
-
----
-
-## Events
-
-The Events page retrieves company events from the backend and displays:
-
-- Event Name
-- Event Description
-- Event Date
-- Event Status
-
----
-
-## Running the Project
-
-### Clone the Repository
+## Testing
 
 ```bash
-git clone <repository-url>
+npm test -- --run
 ```
 
----
+Tests currently cover:
 
-### Backend Setup
-
-```bash
-cd backend
-docker compose up --build
-```
-
-Backend:
-
-```
-http://localhost:8000
-```
-
-Swagger Documentation:
-
-```
-http://localhost:8000/docs
-```
-
----
-
-### Frontend Setup
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-Frontend:
-
-```
-http://localhost:5173
-```
-
----
-
-## Production Build
-
-Create a production build:
-
-```bash
-npm run build
-```
-
-Preview the production build locally:
-
-```bash
-npm run preview
-```
-
----
+- ProgressCard percentage/display edge cases
+- TaskCard pending vs completed states
+- Login form validation and error handling
+- Onboarding service calls and HTTP error mapping
+- Legacy localStorage → backend migration (journaling, no duplicates)
+- Task list and task detail pages backed by a mocked onboarding API
+- Logout preserving server-side onboarding data
 
 ## Deployment
 
-The frontend is deployed using **Vercel**.
-
-### Live Demo
-
-https://intern-onboarding-companion.vercel.app
-
-To deploy manually:
+Deployed to Vercel: https://intern-onboarding-companion.vercel.app
 
 ```bash
-npm install -g vercel
-
-vercel
-
 vercel --prod
 ```
 
----
-
-## Quality Checks
-
-The frontend uses Husky and lint-staged to perform automated quality checks before every commit.
-
-The following commands are executed:
-
-```bash
-npm run lint
-npm run format
-npm run type-check
-npm test -- --run
-npm run build
-```
-
-These checks ensure:
-
-- Consistent code formatting
-- ESLint validation
-- TypeScript type safety
-- Successful production build
-
----
-
-## Project Structure
-
-```text
-onboarding-companion/
-
-├── frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   ├── services/
-│   │   ├── routes/
-│   │   ├── styles/
-│   │   └── tests/
-│   ├── public/
-│   ├── package.json
-│   └── vite.config.ts
-│
-└── backend/
-    ├── app/
-    ├── alembic/
-    ├── Dockerfile
-    ├── docker-compose.yml
-    └── pyproject.toml
-```
-
----
-
-## Development Notes
-
-- Axios is used for API communication.
-- React Router is used for client-side routing.
-- JWT-based authentication secures protected pages.
-- REST APIs are documented using Swagger.
-- Docker Compose is used for local backend development.
-- Vercel is used for frontend deployment.
-- TypeScript provides static type checking.
-
----
-
-## Current Implementation Status
-
-| Feature | Status |
-|----------|--------|
-| Login |  Completed |
-| JWT Authentication |  Completed |
-| Protected Routes |  Completed |
-| Dashboard |  Completed |
-| Profile |  Completed |
-| Events |  Completed |
-| REST API Integration |  Completed |
-| Production Build |  Completed |
-| Vercel Deployment |  Completed |
-
----
-
-## Current Limitations
-
-- Some backend endpoints are accessible only to authorized roles.
-- Certain features depend on backend permissions and available APIs.
-- The application relies on the production backend for data.
-
----
-
-## Future Improvements
-
-- Enhanced dashboard analytics
-- Improved responsive design
-- Better loading and error states
-- Expanded unit testing
-- Continuous Integration and Continuous Deployment (CI/CD)
-
----
-
-## Author
-
-**Akshaya Kothakapu**
+Rebuilding the same source twice produces byte-identical `dist/` output, so
+the build is idempotent.

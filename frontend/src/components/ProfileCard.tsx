@@ -21,7 +21,9 @@ function ProfileCard({
 }: ProfileCardProps) {
   return (
     <div className="profile-card">
-      <div className="profile-avatar">👤</div>
+      <div className="profile-avatar" aria-hidden="true">
+        👤
+      </div>
 
       <h2>{name}</h2>
 

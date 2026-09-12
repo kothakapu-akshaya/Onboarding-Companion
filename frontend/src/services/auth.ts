@@ -1,7 +1,20 @@
 import api from "../api/axios";
 
-export const login = async (phone: string, password: string) => {
-  const response = await api.post("/auth/login", {
+import type { UserProfile } from "../types/user";
+
+export interface TokenResponse {
+  access_token: string;
+  token_type: string;
+  user_id: string;
+  username: string | null;
+  phone: string;
+}
+
+export const login = async (
+  phone: string,
+  password: string
+): Promise<TokenResponse> => {
+  const response = await api.post<TokenResponse>("/auth/login", {
     phone,
     password,
   });
@@ -9,7 +22,7 @@ export const login = async (phone: string, password: string) => {
   return response.data;
 };
 
-export const getCurrentUser = async () => {
-  const response = await api.get("/auth/me");
+export const getCurrentUser = async (): Promise<UserProfile> => {
+  const response = await api.get<UserProfile>("/auth/me");
   return response.data;
 };

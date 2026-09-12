@@ -11,6 +11,7 @@ from app.api.v1.endpoints import (
     institutions,
     languages,
     location,
+    onboarding,
     points,
     record_history,
     records,
@@ -38,6 +39,9 @@ api_router.include_router(tasks.router, prefix="/tasks", tags=["tasks"])
 api_router.include_router(points.router, prefix="/points", tags=["points"])
 api_router.include_router(
     location.router, prefix="/location", tags=["location"]
+)
+api_router.include_router(
+    onboarding.router, prefix="/onboarding", tags=["onboarding"]
 )
 api_router.include_router(
     institutions.router, prefix="/institutions", tags=["institutions"]

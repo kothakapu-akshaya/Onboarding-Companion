@@ -1,10 +1,10 @@
 .profile-card {
   max-width: 750px;
   margin: auto;
-  background: white;
-  border-radius: 12px;
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
   padding: 30px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-sm);
 }
 
 .profile-avatar {
@@ -16,6 +16,7 @@
 .profile-card h2 {
   text-align: center;
   margin-bottom: 30px;
+  color: var(--color-text);
 }
 
 .profile-info {
@@ -27,13 +28,31 @@
   display: flex;
   justify-content: space-between;
   padding: 15px 0;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .info-row span {
-  color: #666;
+  color: var(--color-text-muted);
 }
 
 .info-row strong {
-  color: #222;
+  color: var(--color-text);
+  overflow-wrap: anywhere;
+  text-align: right;
+}
+
+@media (max-width: 480px) {
+  .profile-card {
+    padding: var(--space-md);
+  }
+
+  .info-row {
+    align-items: flex-start;
+    gap: var(--space-sm);
+  }
+
+  .info-row span,
+  .info-row strong {
+    min-width: 0;
+  }
 }

@@ -5,16 +5,10 @@ type ProgressCardProps = {
   completedTasks: number;
 };
 
-function ProgressCard({
-  totalTasks,
-  completedTasks,
-}: ProgressCardProps) {
+function ProgressCard({ totalTasks, completedTasks }: ProgressCardProps) {
   const pendingTasks = totalTasks - completedTasks;
 
-  const progress =
-    totalTasks === 0
-      ? 0
-      : (completedTasks / totalTasks) * 100;
+  const progress = totalTasks === 0 ? 0 : (completedTasks / totalTasks) * 100;
 
   return (
     <div className="progress-card">
@@ -23,6 +17,7 @@ function ProgressCard({
       <progress
         value={completedTasks}
         max={totalTasks}
+        aria-label={`Onboarding progress: ${completedTasks} of ${totalTasks} tasks completed`}
       ></progress>
 
       <p>{progress.toFixed(0)}% Completed</p>

@@ -1,33 +1,10 @@
-import { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import ProfileCard from "../components/ProfileCard";
-import { getProfile } from "../services/user";
 
-type UserProfile = {
-  name: string;
-  phone: string;
-  email: string;
-  profession?: string;
-  organisation?: string;
-  current_year_of_study?: string;
-  role?: string;
-};
+import { useAuth } from "../context/auth";
 
 function Profile() {
-  const [user, setUser] = useState<UserProfile | null>(null);
-
-  useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const data = await getProfile();
-        setUser(data);
-      } catch (error) {
-        console.error("Failed to fetch profile", error);
-      }
-    };
-
-    fetchProfile();
-  }, []);
+  const { user } = useAuth();
 
   if (!user) {
     return (
@@ -45,11 +22,11 @@ function Profile() {
 
       <ProfileCard
         name={user.name}
-        phone={user.phone}
-        email={user.email}
-        profession={user.profession}
-        organisation={user.organisation}
-        currentYear={user.current_year_of_study}
+        phone={user.phone || ""}
+        email={user.email || ""}
+        profession={user.profession || undefined}
+        organisation={user.organisation || undefined}
+        currentYear={user.current_year_of_study || undefined}
         role={user.role || "Employee"}
       />
     </Layout>

@@ -1,11 +1,23 @@
-.layout{
-    display:flex;
-    min-height:100vh;
-    background:#f8fafc;
+.layout {
+  display: flex;
+  min-height: 100vh;
+  background: var(--color-bg);
 }
 
-.main-content{
-    flex:1;
-    padding:40px;
-    overflow:auto;
+.main-content {
+  flex: 1;
+  padding: var(--space-xl);
+  overflow: auto;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 768px) {
+  .layout {
+    flex-direction: column;
+  }
+
+  .main-content {
+    padding: var(--space-md);
+  }
 }

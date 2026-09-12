@@ -1,20 +1,19 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
-import {
-  FaHome,
-  FaTasks,
-  FaUser,
-  FaSignOutAlt,
-} from "react-icons/fa";
+import { useAuth } from "../context/auth";
+import ThemeToggle from "./ThemeToggle";
+
+import { FaHome, FaTasks, FaUser, FaSignOutAlt } from "react-icons/fa";
 
 import "../styles/Sidebar.css";
 
 function Sidebar() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { logout } = useAuth();
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    logout();
     navigate("/");
   };
 
@@ -22,60 +21,44 @@ function Sidebar() {
     <aside className="sidebar">
       <div className="logo">
         <h2>Intern Onboarding Companion</h2>
-<p
-  style={{
-    fontSize: "12px",
-    color: "#666",
-    marginTop: "6px",
-    textAlign: "center",
-  }}
->
-  Internship Workbench
-</p>
+
+        <p className="logo-tagline">Internship Workbench</p>
       </div>
 
-      <nav className="menu">
+      <nav className="menu" aria-label="Primary navigation">
         <Link
           to="/dashboard"
           className={location.pathname === "/dashboard" ? "active" : ""}
+          aria-current={location.pathname === "/dashboard" ? "page" : undefined}
         >
-          <FaHome />
+          <FaHome aria-hidden="true" />
           <span>Dashboard</span>
         </Link>
 
         <Link
           to="/tasks"
           className={location.pathname === "/tasks" ? "active" : ""}
+          aria-current={location.pathname === "/tasks" ? "page" : undefined}
         >
-          <FaTasks />
+          <FaTasks aria-hidden="true" />
           <span>Onboarding Checklist</span>
         </Link>
 
         <Link
           to="/profile"
           className={location.pathname === "/profile" ? "active" : ""}
+          aria-current={location.pathname === "/profile" ? "page" : undefined}
         >
-          <FaUser />
+          <FaUser aria-hidden="true" />
           <span>Profile</span>
         </Link>
       </nav>
 
       <div className="logout">
-        <button
-          onClick={handleLogout}
-          style={{
-            background: "none",
-            border: "none",
-            color: "inherit",
-            cursor: "pointer",
-            display: "flex",
-            alignItems: "center",
-            gap: "10px",
-            fontSize: "16px",
-            width: "100%",
-          }}
-        >
-          <FaSignOutAlt />
+        <ThemeToggle />
+
+        <button onClick={handleLogout} type="button">
+          <FaSignOutAlt aria-hidden="true" />
           <span>Logout</span>
         </button>
       </div>

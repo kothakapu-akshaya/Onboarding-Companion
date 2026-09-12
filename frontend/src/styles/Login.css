@@ -3,20 +3,26 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #f5f7fb;
+  background-color: var(--color-bg);
 }
 
 .login-card {
   width: 350px;
-  background: white;
+  background: var(--color-surface);
   padding: 35px;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+}
+
+@media (max-width: 480px) {
+  .login-card {
+    width: calc(100vw - 40px);
+  }
 }
 
 .login-card h1 {
   text-align: center;
-  color: #1d4ed8;
+  color: var(--color-primary-hover);
   margin-bottom: 10px;
 }
 
@@ -28,44 +34,61 @@
 .input-group {
   display: flex;
   flex-direction: column;
-  margin-bottom: 18px;
+  margin-bottom: var(--space-md);
 }
 
 .input-group label {
-  margin-bottom: 6px;
+  margin-bottom: var(--space-xs);
   font-weight: 600;
 }
 
 .input-group input {
   padding: 10px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
   font-size: 15px;
+  background: var(--color-surface);
+  color: var(--color-text);
 }
 
 .input-group input:focus {
   outline: none;
-  border-color: #2563eb;
+  border-color: var(--color-primary);
 }
 
 .forgot-password {
   text-align: right;
-  color: #2563eb;
+  color: var(--color-primary);
   cursor: pointer;
   margin-bottom: 20px;
   font-size: 14px;
 }
 
+.login-error {
+  background: var(--color-danger);
+  color: var(--color-text-inverse);
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  margin-bottom: var(--space-md);
+}
+
+.login-card button:disabled {
+  background: var(--color-surface-hover);
+  color: var(--color-text-muted);
+  cursor: not-allowed;
+}
+
 button {
   width: 100%;
   padding: 12px;
-  background-color: #2563eb;
-  color: white;
+  background-color: var(--color-primary);
+  color: var(--color-text-inverse);
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   font-size: 16px;
 }
 
 button:hover {
-  background-color: #1d4ed8;
+  background-color: var(--color-primary-hover);
 }

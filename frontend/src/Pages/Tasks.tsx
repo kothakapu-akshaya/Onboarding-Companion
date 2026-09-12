@@ -2,10 +2,14 @@ import Layout from "../components/Layout";
 import TaskCard from "../components/TaskCard";
 
 import { onboardingTasks } from "../data/onboardingTasks";
-import { getProgress } from "../utils/taskStorage";
+import { useOnboarding } from "../context/onboarding";
 
 function Tasks() {
-  const progress = getProgress();
+  const { progressMap, status, error, refresh } = useOnboarding();
+
+  const completedCount = onboardingTasks.filter(
+    (task) => progressMap[String(task.id)]?.status === "completed"
+  ).length;
 
   return (
     <Layout>
@@ -13,9 +17,7 @@ function Tasks() {
 
       <br />
 
-      <p>
-        Complete each onboarding task to finish your internship setup.
-      </p>
+      <p>Complete each onboarding task to finish your internship setup.</p>
 
       <br />
 
@@ -30,15 +32,23 @@ function Tasks() {
       <br />
       <br />
 
+      {status === "loading" && (
+        <p className="page-status" role="status">
+          Loading onboarding progress…
+        </p>
+      )}
+
+      {status === "error" && (
+        <div className="page-error" role="alert">
+          <p>{error}</p>
+          <button type="button" onClick={() => void refresh()}>
+            Retry
+          </button>
+        </div>
+      )}
+
       <h3>
-        Completed{" "}
-        {
-          onboardingTasks.filter(
-            (task) => progress[task.id]?.completed
-          ).length
-        }
-        {" / "}
-        {onboardingTasks.length}
+        Completed {completedCount} / {onboardingTasks.length}
       </h3>
 
       <br />
@@ -49,7 +59,7 @@ function Tasks() {
           id={task.id}
           title={task.title}
           status={
-            progress[task.id]?.completed
+            progressMap[String(task.id)]?.status === "completed"
               ? "Completed"
               : "Pending"
           }

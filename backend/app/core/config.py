@@ -12,6 +12,9 @@ class Settings:
     )
     VERSION: str = "0.1.0"
     API_V1_STR: str = "/api/v1"
+    CORPUS_API_URL: str = os.getenv(
+        "CORPUS_API_URL", "https://api.corpus.swecha.org/api/v1"
+    )
 
     # Database settings - Individual components for PostgreSQL
     DB_HOST: str = os.getenv("DB_HOST", "localhost")

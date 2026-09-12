@@ -312,8 +312,11 @@ class HetznerStorageClient:
         """
         try:
             # Prepare metadata - convert to MinIO format
+            # note: `content-type` is intentionally excluded from user
+            # metadata; it is sent as the real Content-Type header via the
+            # `content_type` argument. Including it as metadata causes an S3
+            # SignatureDoesNotMatch on PUT for compatible servers.
             upload_metadata: MetadataType = {
-                "content-type": content_type,
                 "upload-timestamp": datetime.now().isoformat(),
             }
 
