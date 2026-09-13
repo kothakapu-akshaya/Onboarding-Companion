@@ -20,9 +20,9 @@ function Sidebar() {
   return (
     <aside className="sidebar">
       <div className="logo">
-        <h2>Intern Onboarding Companion</h2>
+        <h2>Onboarding Companion</h2>
 
-        <p className="logo-tagline">Internship Workbench</p>
+        <p className="logo-tagline">Onboarding Companion</p>
       </div>
 
       <nav className="menu" aria-label="Primary navigation">

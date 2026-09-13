@@ -17,7 +17,7 @@ function Tasks() {
 
       <br />
 
-      <p>Complete each onboarding task to finish your internship setup.</p>
+      <p>Complete each onboarding task to finish your setup.</p>
 
       <br />
 

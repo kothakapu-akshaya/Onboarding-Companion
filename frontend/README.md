@@ -1,6 +1,6 @@
-# Intern Onboarding Companion — Frontend
+# Onboarding Companion — Frontend
 
-React + TypeScript + Vite frontend for the Intern Onboarding Companion: a
+React + TypeScript + Vite frontend for the Onboarding Companion: a
 checklist app that walks interns through the Swecha Workbench setup tasks.
 
 ## Tech Stack

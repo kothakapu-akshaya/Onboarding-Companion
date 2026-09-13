@@ -39,7 +39,7 @@ function Login() {
   return (
     <div className="login-container">
       <form className="login-card" onSubmit={handleLogin}>
-        <h1>Intern Onboarding</h1>
+        <h1>Onboarding Companion</h1>
         <h2>Login</h2>
 
         <div className="input-group">
