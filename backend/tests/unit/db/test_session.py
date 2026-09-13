@@ -100,3 +100,24 @@ class TestCreateDbAndTables:
         from app.db.session import create_db_and_tables
 
         assert callable(create_db_and_tables)
+
+    @patch("app.db.session.SQLModel.metadata.create_all")
+    def test_creates_only_onboarding_tables(self, mock_create_all):
+        """Test startup initialization is scoped to onboarding tables."""
+        from app.db.session import (
+            OnboardingEvidence,
+            OnboardingProgress,
+            create_db_and_tables,
+            engine,
+        )
+
+        create_db_and_tables()
+
+        mock_create_all.assert_called_once_with(
+            engine,
+            tables=[
+                OnboardingProgress.__table__,
+                OnboardingEvidence.__table__,
+            ],
+            checkfirst=True,
+        )
