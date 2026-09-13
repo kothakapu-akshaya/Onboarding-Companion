@@ -57,4 +57,4 @@ USER appuser
 EXPOSE 8000
 
 # Default command to run the application with Gunicorn
-CMD ["gunicorn", "-k", "uvicorn.workers.UvicornWorker", "app.main:app", "-w", "4", "-b", "0.0.0.0:8000"]
+CMD ["uv", "run", "gunicorn", "-k", "uvicorn.workers.UvicornWorker", "app.main:app", "-w", "4", "-b", "0.0.0.0:8000"]
